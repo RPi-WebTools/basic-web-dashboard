@@ -1,40 +1,22 @@
 <template>
-    <div id="app">
-        <Navigation id="nav"></Navigation>
-        <router-view/>
-    </div>
+  <div id="app">
+    <router-view/>
+  </div>
 </template>
 
-<script>
-import Navigation from './components/Navigation'
+<style lang="scss">
+@import '~vue-material/dist/theme/engine';
 
-export default {
-    name: 'app',
-    components: {
-        'Navigation': Navigation
-    }
-}
-</script>
+@include md-register-theme('default', (
+    primary: #ff9800,
+    accent: #f44336,
+    theme: dark
+));
 
-<style>
+@import '~vue-material/dist/theme/all';
+
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-/*
-#nav {
-    padding: 30px;
-}
-
-#nav a {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-    color: #42b983;
-}*/
 </style>
