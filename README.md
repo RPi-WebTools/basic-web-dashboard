@@ -22,3 +22,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Used icons
+This project uses FontAwesome icons ([license](https://fontawesome.com/license)).

@@ -1,7 +1,7 @@
 <template>
-    <div class="home">
+    <div class="network">
         <div class="md-layout md-alignment-center-space-between">
-            <h1 class="md-layout-item">Home</h1>
+            <h1 class="md-layout-item">Network</h1>
             <div class="md-layout-item" style="display: flex; align-items: center;">
                 <span style="flex-grow: 1;"></span>
                 <md-button class="md-icon-button md-primary">
@@ -11,46 +11,35 @@
                 <md-chip class="md-primary">Data from: {{ latestTimestamp }}</md-chip>
             </div>
         </div>
-
-        <div class="md-layout md-gutter md-alignment-center">
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-                        <device-info/>
-                    </md-card-content>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-
-                    </md-card-content>
-                </md-card>
-            </div>
-        </div>
-
+        <md-card>
+            <md-card-content>
+                <network-info/>
+            </md-card-content>
+        </md-card>
         <br>
         <div class="md-layout md-gutter md-alignment-center">
             <div class="md-layout-item">
                 <md-card>
                     <md-card-content>
-                        <user-info/>
+                        <network-usage/>
                     </md-card-content>
                 </md-card>
+            </div>
+            <div class="md-layout-item">
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import DeviceInfo from '@/components/DeviceInfo.vue'
-import UserInfo from '@/components/UserInfo.vue'
+import NetworkUsage from '@/components/NetworkUsage.vue'
+import NetworkInfo from '@/components/NetworkInfo.vue'
 
 export default {
-    name: 'Home',
+    name: 'Network',
     components: {
-        DeviceInfo,
-        UserInfo
+        NetworkUsage,
+        NetworkInfo
     },
     data () {
         return {

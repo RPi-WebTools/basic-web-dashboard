@@ -1,49 +1,52 @@
 <template>
     <div>
         <div class="chartContainer">
-            <bar-chart :chartdata="barChartData" :options="barOptions" :styles="styles"></bar-chart>
+            <div class="md-layout md-alignment-center-space-between">
+                <div class="md-layout-item md-size-30">
+                    <md-card>
+                        <md-card-header style="font-size: 20px;">CPU temperature:</md-card-header>
+                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ curCpuTemp }} °C</md-card-content>
+                    </md-card>
+                </div>
+                <line-chart class="md-layout-item" :chartdata="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import BarChart from '../charts/BarChart.vue'
+import LineChart from '../charts/LineChart.vue'
 
 export default {
-    name: 'NetworkUsage',
+    name: 'CurTempHist',
     components: {
-        BarChart
+        LineChart
     },
     data () {
         return {
-            barChartData: {
-                labels: ['1', '2', '3'],
+            curCpuTemp: 40,
+            lineChartData: {
+                labels: ['1', '2', '3', '4'],
                 datasets: [
                     {
-                        label: 'Network input per day',
-                        backgroundColor: '#8BC34A',
-                        data: [25, 16, 24]
-                    },
-                    {
-                        label: 'Network output per day',
-                        backgroundColor: '#29B6F6',
-                        data: [5, 6, 2]
+                        fill: false,
+                        backgroundColor: '#ff9800',
+                        borderColor: '#ff9800',
+                        data: [25, 10, 45, 20]
                     }
                 ]
             },
-            barOptions: {
+            lineOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Network usage',
+                    text: 'CPU temperature history in °C',
                     fontColor: '#fafafa',
                     fontSize: 20
                 },
                 legend: {
-                    labels: {
-                        fontColor: '#fafafa'
-                    }
+                    display: false
                 },
                 scales: {
                     xAxes: [{
@@ -56,11 +59,11 @@ export default {
                     }],
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true,
                             fontColor: '#fafafa'
                         },
                         gridLines: {
-                            color: '#fafafa'
+                            color: '#fafafa',
+                            borderDash: [4, 15]
                         }
                     }]
                 }
@@ -74,8 +77,8 @@ export default {
 </script>
 
 <style scoped>
-.chartContainer {
-    max-height: 300px;
+/*.chartContainer {
+    max-width: 650px;
     position: relative;
-}
+}*/
 </style>

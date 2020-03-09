@@ -1,42 +1,39 @@
 <template>
     <div>
         <div class="chartContainer">
-            <bar-chart :chartdata="barChartData" :options="barOptions" :styles="styles"></bar-chart>
+            <line-chart :chartdata="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
         </div>
     </div>
 </template>
 
 <script>
-import BarChart from '../charts/BarChart.vue'
+import LineChart from '../charts/LineChart.vue'
 
 export default {
-    name: 'NetworkUsage',
+    name: 'CpuUsageHist',
     components: {
-        BarChart
+        LineChart
     },
     data () {
         return {
-            barChartData: {
-                labels: ['1', '2', '3'],
+            lineChartData: {
+                labels: ['1', '2', '3', '4'],
                 datasets: [
                     {
-                        label: 'Network input per day',
+                        label: 'Used',
+                        fill: false,
                         backgroundColor: '#8BC34A',
-                        data: [25, 16, 24]
-                    },
-                    {
-                        label: 'Network output per day',
-                        backgroundColor: '#29B6F6',
-                        data: [5, 6, 2]
+                        borderColor: '#8BC34A',
+                        data: [25, 10, 45, 20]
                     }
                 ]
             },
-            barOptions: {
+            lineOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: 'Network usage',
+                    text: 'CPU usage history in %',
                     fontColor: '#fafafa',
                     fontSize: 20
                 },
@@ -57,10 +54,12 @@ export default {
                     yAxes: [{
                         ticks: {
                             beginAtZero: true,
+                            max: 100,
                             fontColor: '#fafafa'
                         },
                         gridLines: {
-                            color: '#fafafa'
+                            color: '#fafafa',
+                            borderDash: [4, 15]
                         }
                     }]
                 }
@@ -74,8 +73,8 @@ export default {
 </script>
 
 <style scoped>
-.chartContainer {
+/*.chartContainer {
     max-height: 300px;
     position: relative;
-}
+}*/
 </style>

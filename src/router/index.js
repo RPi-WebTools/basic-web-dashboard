@@ -7,12 +7,28 @@ const routes = [
     {
         path: '/',
         name: 'Base',
+        redirect: 'home',
         component: () => import('../components/BaseLayout.vue'),
         children: [
             {
                 path: 'home',
                 name: 'Home',
                 component: () => import('../views/Home.vue')
+            },
+            {
+                path: 'cpumem',
+                name: 'CpuAndMemory',
+                component: () => import('../views/CpuAndMemory.vue')
+            },
+            {
+                path: 'network',
+                name: 'Network',
+                component: () => import('../views/Network.vue')
+            },
+            {
+                path: 'storage',
+                name: 'Filesystem',
+                component: () => import('../views/Filesystem.vue')
             },
             {
                 path: 'docker',
