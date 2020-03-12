@@ -28,7 +28,13 @@ const routes = [
             {
                 path: 'storage',
                 name: 'Filesystem',
-                component: () => import('../views/Filesystem.vue')
+                component: () => import('../views/Filesystem.vue'),
+                children: [
+                    {
+                        path: ':uuid',
+                        component: () => import('../views/StorageMedium.vue')
+                    }
+                ]
             },
             {
                 path: 'docker',

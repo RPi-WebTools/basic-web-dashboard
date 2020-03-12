@@ -16,7 +16,7 @@
                             <td style="width: 30px; border: 0;">
                                 <md-icon :md-src="require('../assets/hdd-regular.svg')"></md-icon>
                             </td>
-                            <td style="border: 0;">
+                            <td style="border: 0; padding-left: 5px;">
                                 <md-progress-bar md-mode="determinate" :md-value="item.usedPercentage" style="height: 10px;"></md-progress-bar>
                             </td>
                         </tr>
@@ -25,8 +25,6 @@
                 <md-table-cell md-label="UUID" md-sort-by="uuid">{{ item.uuid }}</md-table-cell>
             </md-table-row>
         </md-table>
-
-        <p>{{ selectedFs }}</p>
     </div>
 </template>
 
@@ -45,7 +43,7 @@ export default {
                     size: 1000200990720,
                     used: 794093477888,
                     usedPercentage: 79.3933904540894,
-                    uuid: 'uibiu-398z93'
+                    uuid: 'eluwgg-398z93'
                 },
                 {
                     num: 2,
@@ -56,7 +54,7 @@ export default {
                     size: 999955562496,
                     used: 218658373632,
                     usedPercentage: 21.8668090696155,
-                    uuid: 'uibiu-398z93'
+                    uuid: 'uibiu-39aasdz93'
                 },
                 {
                     num: 3,
@@ -67,15 +65,14 @@ export default {
                     size: 3000574668800,
                     used: 1638683799552,
                     usedPercentage: 54.6123319839712,
-                    uuid: 'uibiu-398z93'
+                    uuid: '6357s-398z93'
                 }
-            ],
-            selectedFs: {}
+            ]
         }
     },
     methods: {
         onSelect (item) {
-            this.selectedFs = item
+            this.$emit('selected', item)
         }
     }
 }

@@ -17,10 +17,17 @@
             <div class="md-layout-item">
                 <md-card>
                     <md-card-content>
-                        <FsInfo/>
+                        <FsInfo @selected="updateSelected" />
                     </md-card-content>
                 </md-card>
             </div>
+        </div>
+
+        <br>
+        <div v-if="showFsDetails">
+            <transition name="slide">
+                <router-view :fsDetails="selectedFsDetails" />
+            </transition>
         </div>
     </div>
 </template>
@@ -35,7 +42,21 @@ export default {
     },
     data () {
         return {
-            latestTimestamp: '07.03.20 13:00'
+            latestTimestamp: '07.03.20 13:00',
+            showFsDetails: false,
+            selectedFsDetails: {}
+        }
+    },
+    methods: {
+        updateSelected (data) {
+            this.selectedFsDetails = data
+            if (data == null || Object.keys(data).length === 0) {
+                this.showFsDetails = false
+                if (this.$route.path !== '/storage') this.$router.push('/storage')
+            } else {
+                this.showFsDetails = true
+                if (this.$route.path !== ('/storage/' + data.uuid)) this.$router.push('/storage/' + data.uuid)
+            }
         }
     }
 }
