@@ -8,7 +8,7 @@
                         <md-card-content style="font-size: 20px;font-weight: bold;">{{ curCpuTemp }} °C</md-card-content>
                     </md-card>
                 </div>
-                <line-chart class="md-layout-item" :chartdata="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
+                <line-chart class="md-layout-item" :chartData="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
             </div>
         </div>
     </div>

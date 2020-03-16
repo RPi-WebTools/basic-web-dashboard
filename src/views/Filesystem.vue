@@ -24,9 +24,9 @@
         </div>
 
         <br>
-        <div v-if="showFsDetails">
+        <div v-show="showFsDetails" style="border: 1px solid #ff9800; padding: 10px;">
             <transition name="slide">
-                <router-view :fsDetails="selectedFsDetails" />
+                <router-view :key="$route.path" :fsDetails="selectedFsDetails" @created="childCreated" />
             </transition>
         </div>
     </div>
@@ -44,6 +44,7 @@ export default {
         return {
             latestTimestamp: '07.03.20 13:00',
             showFsDetails: false,
+            childUuid: null,
             selectedFsDetails: {}
         }
     },
@@ -56,6 +57,27 @@ export default {
             } else {
                 this.showFsDetails = true
                 if (this.$route.path !== ('/storage/' + data.uuid)) this.$router.push('/storage/' + data.uuid)
+            }
+        },
+        childCreated (data) {
+            this.childUuid = data
+        }
+    },
+    mounted () {
+        if (this.childUuid !== null) {
+            this.showFsDetails = true
+            // TODO: need to get data here too
+            this.selectedFsDetails = {
+                num: 1,
+                name: '/dev/sda',
+                fsType: 'vfat',
+                label: 'Ext HDD',
+                mount: '/home/pi/ext',
+                size: 1000200990720,
+                used: 794093477888,
+                usedPercentage: 79.3933904540894,
+                uuid: 'eluwgg-398z93',
+                smart: 'Ok'
             }
         }
     }

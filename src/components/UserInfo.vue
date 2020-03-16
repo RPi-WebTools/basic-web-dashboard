@@ -17,7 +17,7 @@
             </md-table>
         </div>
         <div class="md-layout-item">
-            <bar-chart :chartdata="barChartData" :options="barOptions" :styles="styles"></bar-chart>
+            <bar-chart :chartData="barChartData" :options="barOptions" :styles="styles"></bar-chart>
         </div>
     </div>
 </template>

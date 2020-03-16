@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="chartContainer">
-            <line-chart :chartdata="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
+            <line-chart :chartData="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
         </div>
     </div>
 </template>
@@ -50,6 +50,7 @@ export default {
                     {
                         label: 'In Swap',
                         fill: false,
+                        backgroundColor: '#f44336',
                         borderColor: '#f44336',
                         data: [1, 5, 2, 10]
                     }

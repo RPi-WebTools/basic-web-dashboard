@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="chartContainer">
-            <line-chart :chartdata="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
+            <line-chart :chartData="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
         </div>
     </div>
 </template>

@@ -8,7 +8,7 @@
                         <md-card-content style="font-size: 20px;font-weight: bold;">{{ curCpuLoad }} %</md-card-content>
                     </md-card>
                 </div>
-                <doughnut-chart class="md-layout-item" :chartdata="doughnutChartData" :options="doughnutOptions" :styles="styles"></doughnut-chart>
+                <doughnut-chart class="md-layout-item" :chartData="doughnutChartData" :options="doughnutOptions" :styles="styles"></doughnut-chart>
             </div>
         </div>
     </div>
