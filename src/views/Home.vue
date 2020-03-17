@@ -23,7 +23,7 @@
             <div class="md-layout-item">
                 <md-card>
                     <md-card-content>
-
+                        <FsOverview/>
                     </md-card-content>
                 </md-card>
             </div>
@@ -45,12 +45,14 @@
 <script>
 import DeviceInfo from '@/components/DeviceInfo.vue'
 import UserInfo from '@/components/UserInfo.vue'
+import FsOverview from '@/components/FsOverview.vue'
 
 export default {
     name: 'Home',
     components: {
         DeviceInfo,
-        UserInfo
+        UserInfo,
+        FsOverview
     },
     data () {
         return {

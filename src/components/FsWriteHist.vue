@@ -10,20 +10,22 @@
 import LineChart from '../charts/LineChart.vue'
 
 export default {
-    name: 'CurTempHist',
+    name: 'FswriteHist',
     components: {
         LineChart
     },
+    props: {
+        uuid: String
+    },
     data () {
         return {
-            curCpuTemp: 40,
             lineChartData: {
                 labels: ['1', '2', '3', '4'],
                 datasets: [
                     {
                         fill: false,
-                        backgroundColor: '#ff9800',
-                        borderColor: '#ff9800',
+                        backgroundColor: '#8BC34A',
+                        borderColor: '#8BC34A',
                         data: [25, 10, 45, 20]
                     }
                 ]
@@ -58,7 +60,7 @@ export default {
                 }
             },
             styles: {
-                // height: '300px'
+                height: '202px'
             }
         }
     }

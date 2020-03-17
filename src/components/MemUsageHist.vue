@@ -21,21 +21,21 @@ export default {
                 datasets: [
                     {
                         label: 'Used',
-                        fill: true,
+                        fill: false,
                         backgroundColor: '#8BC34A',
                         borderColor: '#8BC34A',
                         data: [25, 10, 45, 20]
                     },
                     {
                         label: 'Buffered',
-                        fill: true,
+                        fill: false,
                         backgroundColor: '#29B6F6',
                         borderColor: '#29B6F6',
                         data: [13, 20, 40, 10]
                     },
                     {
                         label: 'Cached',
-                        fill: true,
+                        fill: false,
                         backgroundColor: '#FFCA28',
                         borderColor: '#FFCA28',
                         data: [30, 70, 20, 50]

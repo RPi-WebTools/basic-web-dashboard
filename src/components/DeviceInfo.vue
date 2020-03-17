@@ -84,17 +84,47 @@ export default {
     name: 'DeviceInfo',
     data () {
         return {
-            manufacturer: 'RPi Foundation',
-            model: 'Raspberry Pi 4 B',
-            version: 'Rev 1.1',
-            cpuManufacturer: 'ARM',
-            cpuCores: '4',
-            memory: '4 GB',
-            osDistro: 'Linux Raspbian',
-            osCode: 'buster',
-            osHostname: 'raspi',
-            uptime: '1d 16h'
+            // manufacturer: 'RPi Foundation',
+            // model: 'Raspberry Pi 4 B',
+            // version: 'Rev 1.1',
+            // cpuManufacturer: 'ARM',
+            // cpuCores: '4',
+            // memory: '4 GB',
+            // osDistro: 'Linux Raspbian',
+            // osCode: 'buster',
+            // osHostname: 'raspi',
+            // uptime: '1d 16h'
+            manufacturer: '',
+            model: '',
+            version: '',
+            cpuManufacturer: '',
+            cpuCores: '',
+            memory: '',
+            osDistro: '',
+            osCode: '',
+            osHostname: '',
+            uptime: ''
         }
+    },
+    methods: {
+        fetchDeviceData () {
+            const url = 'http://localhost:3000/api/deviceInfo'
+            this.$http.get(url).then((result) => {
+                this.manufacturer = result.data.manufacturer
+                this.model = result.data.model
+                this.version = result.data.version
+                this.cpuManufacturer = result.data.cpuManufacturer
+                this.cpuCores = result.data.cpuCores
+                this.memory = result.data.memory
+                this.osDistro = result.data.osDistro
+                this.osCode = result.data.osCode
+                this.osHostname = result.data.osHostname
+                this.uptime = result.data.uptime
+            })
+        }
+    },
+    mounted () {
+        this.fetchDeviceData()
     }
 }
 </script>

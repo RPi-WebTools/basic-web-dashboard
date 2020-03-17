@@ -23,7 +23,10 @@
                         :md-src="require('@/assets/harddrive.svg')"
                     ></md-icon>
                     <br>
-                    <span style="font-size: 150%;">{{ fsDetails.smart }}</span>
+                    <span style="font-size: 150%;">
+                        <span v-if="fsDetails.smart === 'Predicted Failure'">{{ fsDetails.smart }}</span>
+                        <span v-else>Status<br>{{ fsDetails.smart }}</span>
+                    </span>
                 </div>
             </div>
             <div class="item label">
@@ -143,29 +146,37 @@
                     </div>
                 </md-toolbar>
             </div>
-            <div class="item chart-capacity">
-                <md-toolbar class="md-dense">
-                    <h3 class="md-title gap-above">
-                        <span class="text-title">Used capacity in %</span>
-                    </h3>
-                    <DoughnutChart :chartData="doughnutChartData" :options="doughnutOptions" :styles="styles"/>
-                </md-toolbar>
-            </div>
-            <div class="item chart-partitions">
-                <md-toolbar class="md-dense">
-                    <h3 class="md-title gap-above">
-                        <span class="text-title">Disk partitions:</span>
-                    </h3>
-                    <DoughnutChart :chartData="doughnutChartData" :options="doughnutOptions" :styles="styles"/>
-                </md-toolbar>
+            <div class="item charts">
+                <div class="chart-container">
+                    <md-card>
+                        <md-card-header class="text-title" style="font-size: 20px;">Used capacity in %</md-card-header>
+                        <md-card-content>
+                            <DoughnutChart :chartData="doughnutChartData" :options="doughnutOptions" :styles="doughnutStyles"/>
+                        </md-card-content>
+                    </md-card>
+                    <md-card>
+                        <md-card-header class="text-title" style="font-size: 20px;">Disk partitions:</md-card-header>
+                        <md-card-content>
+                            <DoughnutChart :chartData="doughnutChartData" :options="doughnutOptions" :styles="doughnutStyles"/>
+                        </md-card-content>
+                    </md-card>
+                </div>
             </div>
             <div class="item fs-io">
-                <md-toolbar class="md-dense">
-                    <h3 class="md-title gap-above">
-                        <span class="text-title">Disk partitions:</span>
-                    </h3>
-                    <FsIoHist :chartData="doughnutChartData" :options="doughnutOptions" :styles="styles"/>
-                </md-toolbar>
+                <div class="chart-container">
+                    <md-card>
+                        <md-card-header class="text-title" style="font-size: 20px;">Read operations:</md-card-header>
+                        <md-card-content>
+                            <FsReadHist :uuid="uuid"/>
+                        </md-card-content>
+                    </md-card>
+                    <md-card>
+                        <md-card-header class="text-title" style="font-size: 20px;">Write operations:</md-card-header>
+                        <md-card-content>
+                            <FsWriteHist :uuid="uuid"/>
+                        </md-card-content>
+                    </md-card>
+                </div>
             </div>
         </div>
     </div>
@@ -173,7 +184,8 @@
 
 <script>
 import DoughnutChart from '@/charts/DoughnutChart.vue'
-import FsIoHist from '@/components/FsIoHist.vue'
+import FsReadHist from '@/components/FsReadHist.vue'
+import FsWriteHist from '@/components/FsWriteHist.vue'
 
 export default {
     name: 'StorageMedium',
@@ -183,7 +195,8 @@ export default {
     },
     components: {
         DoughnutChart,
-        FsIoHist
+        FsReadHist,
+        FsWriteHist
     },
     data () {
         return {
@@ -203,8 +216,8 @@ export default {
                     align: 'middle'
                 }
             },
-            styles: {
-                height: '300px'
+            doughnutStyles: {
+                // height: '300px'
             }
         }
     },
@@ -301,18 +314,20 @@ export default {
     grid-row: 2;
 }
 
-.chart-capacity {
+.charts {
     grid-column: 3;
     grid-row: 2;
 }
 
-.chart-partitions {
-    grid-column: 4;
-    grid-row: 2;
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
 }
 
 .fs-io {
-    grid-column: 5 / span 3;
+    grid-column: 4 / span 4;
     grid-row: 2;
 }
 
