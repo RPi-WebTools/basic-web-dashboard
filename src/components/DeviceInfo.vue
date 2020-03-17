@@ -7,17 +7,17 @@
                     <tr>
                         <td><md-icon :md-src="require('@/assets/raspberry-pi-brands.svg')"></md-icon></td>
                         <td><strong>Manufacturer:</strong></td>
-                        <td>{{ manufacturer }}</td>
+                        <td>{{ devInfo.manufacturer }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><strong>Model:</strong></td>
-                        <td>{{ model }}</td>
+                        <td>{{ devInfo.model }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><strong>Version:</strong></td>
-                        <td>{{ version }}</td>
+                        <td>{{ devInfo.version }}</td>
                     </tr>
                     <tr class="empty-row">
                         <td class="empty"></td>
@@ -27,17 +27,17 @@
                     <tr>
                         <td><md-icon :md-src="require('@/assets/linux-brands.svg')"></md-icon></td>
                         <td><strong>OS:</strong></td>
-                        <td>{{ osDistro }}</td>
+                        <td>{{ devInfo.osDistro }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><strong>OS Code:</strong></td>
-                        <td>{{ osCode }}</td>
+                        <td>{{ devInfo.osCode }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><strong>OS Hostname:</strong></td>
-                        <td>{{ osHostname }}</td>
+                        <td>{{ devInfo.osHostname }}</td>
                     </tr>
                 </table>
             </div>
@@ -46,12 +46,12 @@
                     <tr>
                         <td><md-icon :md-src="require('@/assets/microchip-solid.svg')"></md-icon></td>
                         <td><strong>CPU manufacturer:</strong></td>
-                        <td>{{ cpuManufacturer }}</td>
+                        <td>{{ devInfo.cpuManufacturer }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><strong>CPU cores:</strong></td>
-                        <td>{{ cpuCores }}</td>
+                        <td>{{ devInfo.cpuCores }}</td>
                     </tr>
                     <tr class="empty-row">
                         <td class="empty"></td>
@@ -61,7 +61,7 @@
                     <tr>
                         <td><md-icon :md-src="require('@/assets/memory-solid.svg')"></md-icon></td>
                         <td><strong>Total memory:</strong></td>
-                        <td>{{ memory }}</td>
+                        <td>{{ devInfo.memory }}</td>
                     </tr>
                     <tr class="empty-row">
                         <td class="empty"></td>
@@ -71,7 +71,7 @@
                     <tr>
                         <td><md-icon :md-src="require('@/assets/clock-regular.svg')"></md-icon></td>
                         <td><strong>System uptime:</strong></td>
-                        <td>{{ uptime }}</td>
+                        <td>{{ devInfo.uptime }}</td>
                     </tr>
                 </table>
             </div>
@@ -80,51 +80,20 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     name: 'DeviceInfo',
-    data () {
-        return {
-            // manufacturer: 'RPi Foundation',
-            // model: 'Raspberry Pi 4 B',
-            // version: 'Rev 1.1',
-            // cpuManufacturer: 'ARM',
-            // cpuCores: '4',
-            // memory: '4 GB',
-            // osDistro: 'Linux Raspbian',
-            // osCode: 'buster',
-            // osHostname: 'raspi',
-            // uptime: '1d 16h'
-            manufacturer: '',
-            model: '',
-            version: '',
-            cpuManufacturer: '',
-            cpuCores: '',
-            memory: '',
-            osDistro: '',
-            osCode: '',
-            osHostname: '',
-            uptime: ''
-        }
-    },
     methods: {
         fetchDeviceData () {
-            const url = 'http://localhost:3000/api/deviceInfo'
-            this.$http.get(url).then((result) => {
-                this.manufacturer = result.data.manufacturer
-                this.model = result.data.model
-                this.version = result.data.version
-                this.cpuManufacturer = result.data.cpuManufacturer
-                this.cpuCores = result.data.cpuCores
-                this.memory = result.data.memory
-                this.osDistro = result.data.osDistro
-                this.osCode = result.data.osCode
-                this.osHostname = result.data.osHostname
-                this.uptime = result.data.uptime
-            })
+            this.$store.dispatch('GET_DEV_INFO')
         }
     },
     mounted () {
         this.fetchDeviceData()
+    },
+    computed: {
+        ...mapState(['devInfo'])
     }
 }
 </script>
