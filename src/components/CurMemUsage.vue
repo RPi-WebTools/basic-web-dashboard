@@ -1,14 +1,15 @@
 <template>
     <div>
+        <h2>Latest memory usage in %</h2>
         <div class="chartContainer">
             <div class="md-layout md-alignment-center">
                 <div class="md-layout-item md-size-30">
                     <md-card>
                         <md-card-header style="font-size: 20px;">Used memory:</md-card-header>
-                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ curMemUsed }} %</md-card-content>
+                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ memInfo.curMemUsed }} %</md-card-content>
                     </md-card>
                 </div>
-                <doughnut-chart class="md-layout-item" :chartData="doughnutChartData" :options="doughnutOptions" :styles="styles"></doughnut-chart>
+                <doughnut-chart class="md-layout-item" :chartData="dataset" :options="doughnutOptions" :styles="styles"></doughnut-chart>
             </div>
         </div>
     </div>
@@ -16,6 +17,7 @@
 
 <script>
 import DoughnutChart from '../charts/DoughnutChart.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: 'CurMemUsage',
@@ -24,30 +26,12 @@ export default {
     },
     data () {
         return {
-            curMemUsed: 25,
-            doughnutChartData: {
-                labels: ['Used', 'Buffered', 'Cached', 'Free'],
-                datasets: [
-                    {
-                        backgroundColor: [
-                            '#8BC34A', // used mem
-                            '#29B6F6', // buffered mem
-                            '#FFCA28', // cached mem
-                            '#607D8B' // free mem
-                        ],
-                        data: [25, 10, 45, 20]
-                    }
-                ]
-            },
             doughnutOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
                 aspectRatio: 1,
                 title: {
-                    display: true,
-                    text: 'Latest memory usage in %',
-                    fontColor: '#fafafa',
-                    fontSize: 20
+                    display: false
                 },
                 legend: {
                     labels: {
@@ -61,6 +45,33 @@ export default {
                 height: '300px'
             }
         }
+    },
+    mounted () {
+        this.$store.dispatch('SYSMON/MEMINFO/GET_MEM_INFO')
+    },
+    computed: {
+        dataset () {
+            return {
+                labels: ['Used', 'Buffered', 'Cached', 'Free'],
+                datasets: [
+                    {
+                        backgroundColor: [
+                            '#8BC34A', // used mem
+                            '#29B6F6', // buffered mem
+                            '#FFCA28', // cached mem
+                            '#607D8B' // free mem
+                        ],
+                        data: [
+                            this.memInfo.curMemUsed,
+                            this.memInfo.curMemBuffered,
+                            this.memInfo.curMemCached,
+                            (100 - (this.memInfo.curMemUsed + this.memInfo.curMemBuffered + this.memInfo.curMemCached))
+                        ]
+                    }
+                ]
+            }
+        },
+        ...mapState('SYSMON/MEMINFO', ['memInfo'])
     }
 }
 </script>

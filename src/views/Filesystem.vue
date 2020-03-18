@@ -65,6 +65,7 @@ export default {
     },
     mounted () {
         if (this.childUuid !== null) {
+            console.log('CHILD DONE')
             this.showFsDetails = true
             // TODO: need to get data here too
             this.selectedFsDetails = {

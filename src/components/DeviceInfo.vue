@@ -86,14 +86,14 @@ export default {
     name: 'DeviceInfo',
     methods: {
         fetchDeviceData () {
-            this.$store.dispatch('GET_DEV_INFO')
+            this.$store.dispatch('SYSMON/DEVINFO/GET_DEV_INFO')
         }
     },
     mounted () {
         this.fetchDeviceData()
     },
     computed: {
-        ...mapState(['devInfo'])
+        ...mapState('SYSMON/DEVINFO', ['devInfo'])
     }
 }
 </script>

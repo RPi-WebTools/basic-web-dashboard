@@ -3,7 +3,7 @@
         <h2>Storage capacity</h2>
         <div class="grid">
             <div class="item table">
-                <md-table v-model="fsInfo">
+                <md-table :value="fsInfo">
                     <md-table-row slot="md-table-row" slot-scope="{ item }">
                         <md-table-cell md-label="Label">{{ item.label }}</md-table-cell>
                         <md-table-cell md-label="Usage">
@@ -22,7 +22,7 @@
                 </md-table>
             </div>
             <div class="item chart">
-                <DoughnutChart :chartData="doughnutChartData" :options="doughnutOptions" :styles="styles"></DoughnutChart>
+                <DoughnutChart :chartData="dataset" :options="doughnutOptions" :styles="styles"></DoughnutChart>
             </div>
         </div>
     </div>
@@ -39,18 +39,6 @@ export default {
     },
     data () {
         return {
-            doughnutChartData: {
-                labels: ['Used', 'Unused'],
-                datasets: [
-                    {
-                        backgroundColor: [
-                            '#8BC34A', // used
-                            '#607D8B' // free
-                        ],
-                        data: [66, 34]
-                    }
-                ]
-            },
             doughnutOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -72,10 +60,33 @@ export default {
         }
     },
     mounted () {
-        this.$store.dispatch('GET_FS_INFO')
+        this.$store.dispatch('SYSMON/FSINFO/GET_FS_INFO')
     },
     computed: {
-        ...mapState(['fsInfo'])
+        dataset () {
+            let usedSpace = 0
+            let totalSpace = 0
+            this.fsInfo.forEach(disk => {
+                usedSpace += disk.used
+                totalSpace += disk.size
+            })
+            return {
+                labels: ['Used', 'Unused'],
+                datasets: [
+                    {
+                        backgroundColor: [
+                            '#8BC34A', // used
+                            '#607D8B' // free
+                        ],
+                        data: [
+                            (usedSpace / totalSpace) * 100,
+                            100 - (usedSpace / totalSpace) * 100
+                        ]
+                    }
+                ]
+            }
+        },
+        ...mapState('SYSMON/FSINFO', ['fsInfo'])
     }
 }
 </script>

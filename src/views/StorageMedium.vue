@@ -4,7 +4,7 @@
         <div class="grid">
             <div class="item icon">
                 <div>
-                    <md-icon class="md-size-4x"
+                    <md-icon class="md-size-4x md-layout-item"
                         v-if="fsDetails.removable"
                         :class="{
                             'filter-green':(fsDetails.smart === 'Ok'),
@@ -13,7 +13,7 @@
                         }"
                         :md-src="require('@/assets/usbdrive.svg')"
                     ></md-icon>
-                    <md-icon class="md-size-4x"
+                    <md-icon class="md-size-4x md-layout-item"
                         v-else
                         :class="{
                             'filter-green':(fsDetails.smart === 'Ok'),
@@ -22,11 +22,7 @@
                         }"
                         :md-src="require('@/assets/harddrive.svg')"
                     ></md-icon>
-                    <br>
-                    <span style="font-size: 150%;">
-                        <span v-if="fsDetails.smart === 'Predicted Failure'">{{ fsDetails.smart }}</span>
-                        <span v-else>Status<br>{{ fsDetails.smart }}</span>
-                    </span>
+                    <md-tooltip md-direction="bottom">{{ fsDetails.smart }}</md-tooltip>
                 </div>
             </div>
             <div class="item label">
@@ -223,8 +219,6 @@ export default {
     },
     created () {
         this.$emit('created', this.$props.uuid)
-    },
-    mounted () {
         this.setChartData()
     },
     methods: {
@@ -295,8 +289,13 @@ export default {
 .icon {
     grid-column: 1;
     grid-row: 1;
-    text-align: center;
     border: 2px solid #fafafa;
+}
+
+.status-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .label {

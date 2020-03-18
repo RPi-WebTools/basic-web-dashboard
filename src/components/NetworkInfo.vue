@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-table v-model="interfaces" md-sort="num" md-sort-order="asc">
+        <md-table :value="netInfo" md-sort="num" md-sort-order="asc">
             <md-table-toolbar>
                 <h2 class="md-title">Network Info</h2>
             </md-table-toolbar>
@@ -21,35 +21,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     name: 'NetworkInfo',
-    data () {
-        return {
-            interfaces: [
-                {
-                    num: 1,
-                    iface: 'eth0',
-                    ip: '192.168.100.100',
-                    mac: '00ebfedasvdewieuvfavea',
-                    type: 'wired',
-                    speed: '1000',
-                    dhcp: 'true',
-                    rx: 203754,
-                    tx: 295352
-                },
-                {
-                    num: 2,
-                    iface: 'eth1',
-                    ip: '192.168.52.40',
-                    mac: '0998gqaw98gf8o47v',
-                    type: 'wireless',
-                    speed: '100',
-                    dhcp: 'false',
-                    rx: 27833,
-                    tx: 69829
-                }
-            ]
-        }
+    mounted () {
+        this.$store.dispatch('SYSMON/NETINFO/GET_NET_INFO')
+    },
+    computed: {
+        ...mapState('SYSMON/NETINFO', ['netInfo'])
     }
 }
 </script>

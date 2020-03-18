@@ -1,14 +1,15 @@
 <template>
     <div>
+        <h2>Latest CPU usage in %</h2>
         <div class="chartContainer">
             <div class="md-layout md-alignment-center">
                 <div class="md-layout-item md-size-30">
                     <md-card>
                         <md-card-header style="font-size: 20px;">CPU load:</md-card-header>
-                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ curCpuLoad }} %</md-card-content>
+                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ cpuInfo.curCpuLoad }} %</md-card-content>
                     </md-card>
                 </div>
-                <doughnut-chart class="md-layout-item" :chartData="doughnutChartData" :options="doughnutOptions" :styles="styles"></doughnut-chart>
+                <doughnut-chart class="md-layout-item" :chartData="dataset" :options="doughnutOptions" :styles="styles"></doughnut-chart>
             </div>
         </div>
     </div>
@@ -16,6 +17,7 @@
 
 <script>
 import DoughnutChart from '../charts/DoughnutChart.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: 'CurCpuUsage',
@@ -24,28 +26,12 @@ export default {
     },
     data () {
         return {
-            curCpuLoad: 50,
-            doughnutChartData: {
-                labels: ['Used', 'Unused'],
-                datasets: [
-                    {
-                        backgroundColor: [
-                            '#8BC34A', // used
-                            '#607D8B' // free
-                        ],
-                        data: [13, 87]
-                    }
-                ]
-            },
             doughnutOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
                 aspectRatio: 1,
                 title: {
-                    display: true,
-                    text: 'Latest CPU usage in %',
-                    fontColor: '#fafafa',
-                    fontSize: 20
+                    display: false
                 },
                 legend: {
                     labels: {
@@ -59,6 +45,26 @@ export default {
                 height: '300px'
             }
         }
+    },
+    created () {
+        this.$store.dispatch('SYSMON/CPUINFO/GET_CPU_INFO')
+    },
+    computed: {
+        dataset () {
+            return {
+                labels: ['Used', 'Unused'],
+                datasets: [
+                    {
+                        backgroundColor: [
+                            '#8BC34A', // used
+                            '#607D8B' // free
+                        ],
+                        data: [this.cpuInfo.curCpuLoad, 100 - this.cpuInfo.curCpuLoad]
+                    }
+                ]
+            }
+        },
+        ...mapState('SYSMON/CPUINFO', ['cpuInfo'])
     }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>Memory usage history in %</h2>
         <div class="chartContainer">
             <line-chart :chartData="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
         </div>
@@ -60,10 +61,7 @@ export default {
                 responsive: true,
                 maintainAspectRatio: false,
                 title: {
-                    display: true,
-                    text: 'Memory usage history in %',
-                    fontColor: '#fafafa',
-                    fontSize: 20
+                    display: false
                 },
                 legend: {
                     labels: {

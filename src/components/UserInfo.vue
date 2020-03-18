@@ -1,7 +1,7 @@
 <template>
     <div class="md-layout md-gutter md-alignment-center">
         <div class="md-layout-item">
-            <md-table v-model="latestUserInfo" md-sort="num" md-sort-order="asc">
+            <md-table :value="userInfo" md-sort="num" md-sort-order="asc">
                 <md-table-toolbar>
                     <h2 class="md-title">User Info</h2>
                 </md-table-toolbar>
@@ -17,13 +17,14 @@
             </md-table>
         </div>
         <div class="md-layout-item">
-            <bar-chart :chartData="barChartData" :options="barOptions" :styles="styles"></bar-chart>
+            <bar-chart :chartData="dataset" :options="barOptions" :styles="styles"></bar-chart>
         </div>
     </div>
 </template>
 
 <script>
 import BarChart from '../charts/BarChart.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: 'UserInfo',
@@ -32,41 +33,6 @@ export default {
     },
     data () {
         return {
-            latestUserInfo: [
-                {
-                    num: 1,
-                    user: 'pi',
-                    terminal: 'ttyBla',
-                    loginDate: '07.03.20',
-                    loginTime: '13:00',
-                    ip: '192.168.100.100',
-                    lastCmd: 'htop'
-                },
-                {
-                    num: 2,
-                    user: 'raspi',
-                    terminal: 'ttyBlub',
-                    loginDate: '10.03.80',
-                    loginTime: '17:00',
-                    ip: '192.168.6.30',
-                    lastCmd: 'nope'
-                }
-            ],
-            barChartData: {
-                labels: ['1', '2', '3', '4', '5', '5', '5'],
-                datasets: [
-                    {
-                        label: 'pi',
-                        backgroundColor: '#8BC34A',
-                        data: [1, 3, 2]
-                    },
-                    {
-                        label: 'raspi',
-                        backgroundColor: '#29B6F6',
-                        data: [0, 6, 2]
-                    }
-                ]
-            },
             barOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -106,6 +72,32 @@ export default {
                 height: '300px'
             }
         }
+    },
+    mounted () {
+        this.$store.dispatch('SYSMON/USERINFO/GET_USER_INFO')
+        this.$store.dispatch('SYSMON/USERHIST/GET_USER_HIST')
+    },
+    computed: {
+        dataset () {
+            const colors = ['#8BC34A', '#29B6F6', '#FFCA28', '#f44336', '#ff9800']
+            const datasets = []
+            let i = 0
+            for (const [key, val] of Object.entries(this.userHist.users)) {
+                datasets.push({
+                    label: key,
+                    backgroundColor: colors[i],
+                    data: val
+                })
+                i += 1
+            }
+
+            return {
+                labels: this.userHist.timestamps,
+                datasets: datasets
+            }
+        },
+        ...mapState('SYSMON/USERINFO', ['userInfo']),
+        ...mapState('SYSMON/USERHIST', ['userHist'])
     }
 }
 </script>

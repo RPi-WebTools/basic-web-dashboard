@@ -1,14 +1,15 @@
 <template>
     <div>
+        <h2>CPU temperature history in °C</h2>
         <div class="chartContainer">
             <div class="md-layout md-alignment-center-space-between">
                 <div class="md-layout-item md-size-30">
                     <md-card>
                         <md-card-header style="font-size: 20px;">CPU temperature:</md-card-header>
-                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ curCpuTemp }} °C</md-card-content>
+                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ cpuInfo.curCpuTemp }} °C</md-card-content>
                     </md-card>
                 </div>
-                <line-chart class="md-layout-item" :chartData="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
+                <line-chart class="md-layout-item" :chartData="dataset" :options="lineOptions" :styles="styles"></line-chart>
             </div>
         </div>
     </div>
@@ -16,6 +17,7 @@
 
 <script>
 import LineChart from '../charts/LineChart.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: 'CurTempHist',
@@ -24,26 +26,11 @@ export default {
     },
     data () {
         return {
-            curCpuTemp: 40,
-            lineChartData: {
-                labels: ['1', '2', '3', '4'],
-                datasets: [
-                    {
-                        fill: false,
-                        backgroundColor: '#ff9800',
-                        borderColor: '#ff9800',
-                        data: [25, 10, 45, 20]
-                    }
-                ]
-            },
             lineOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
                 title: {
-                    display: true,
-                    text: 'CPU temperature history in °C',
-                    fontColor: '#fafafa',
-                    fontSize: 20
+                    display: false
                 },
                 legend: {
                     display: false
@@ -72,6 +59,27 @@ export default {
                 height: '300px'
             }
         }
+    },
+    mounted () {
+        this.$store.dispatch('SYSMON/CPUINFO/GET_CPU_INFO')
+        this.$store.dispatch('SYSMON/CPUHIST/GET_CPU_HIST')
+    },
+    computed: {
+        dataset () {
+            return {
+                labels: this.cpuHist.timestamps,
+                datasets: [
+                    {
+                        fill: false,
+                        backgroundColor: '#ff9800',
+                        borderColor: '#ff9800',
+                        data: this.cpuHist.temperature
+                    }
+                ]
+            }
+        },
+        ...mapState('SYSMON/CPUINFO', ['cpuInfo']),
+        ...mapState('SYSMON/CPUHIST', ['cpuHist'])
     }
 }
 </script>
