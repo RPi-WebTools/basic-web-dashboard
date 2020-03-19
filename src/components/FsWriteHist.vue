@@ -1,13 +1,14 @@
 <template>
     <div>
         <div class="chartContainer">
-            <line-chart class="md-layout-item" :chartData="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
+            <line-chart class="md-layout-item" :chartData="dataset" :options="lineOptions" :styles="styles"></line-chart>
         </div>
     </div>
 </template>
 
 <script>
 import LineChart from '../charts/LineChart.vue'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'FswriteHist',
@@ -19,17 +20,6 @@ export default {
     },
     data () {
         return {
-            lineChartData: {
-                labels: ['1', '2', '3', '4'],
-                datasets: [
-                    {
-                        fill: false,
-                        backgroundColor: '#8BC34A',
-                        borderColor: '#8BC34A',
-                        data: [25, 10, 45, 20]
-                    }
-                ]
-            },
             lineOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -63,6 +53,26 @@ export default {
                 height: '202px'
             }
         }
+    },
+    mounted () {
+        this.$store.dispatch('SYSMON/FSHIST/GET_FS_HIST')
+    },
+    computed: {
+        dataset () {
+            const item = this.fsHistByUuid(this.$props.uuid)[0]
+            return {
+                labels: item.timestamps,
+                datasets: [
+                    {
+                        fill: false,
+                        backgroundColor: '#8BC34A',
+                        borderColor: '#8BC34A',
+                        data: item.tx
+                    }
+                ]
+            }
+        },
+        ...mapGetters('SYSMON/FSHIST', ['fsHistByUuid'])
     }
 }
 </script>

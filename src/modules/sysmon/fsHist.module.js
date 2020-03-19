@@ -1,14 +1,14 @@
 import API from '../../api'
 
 const state = {
-    fsInfo: []
+    fsHist: []
 }
 
 const actions = {
-    GET_FS_INFO ({ commit }) {
-        const url = '/fsInfo'
+    GET_FS_HIST ({ commit }) {
+        const url = '/fsHist'
         API.get(url).then((result) => {
-            commit('SET_FS_INFO', result.data)
+            commit('SET_FS_HIST', result.data)
         }, (err) => {
             console.log(err)
         })
@@ -16,15 +16,15 @@ const actions = {
 }
 
 const mutations = {
-    SET_FS_INFO (state, fsInfo) {
-        state.fsInfo = fsInfo
+    SET_FS_HIST (state, fsHist) {
+        state.fsHist = fsHist
     }
 }
 
 const getters = {
-    fsInfo: state => state.fsInfo,
-    fsInfoByUuid: state => uuid => {
-        return state.fsInfo.filter((item) => {
+    fsHist: state => state.fsHist,
+    fsHistByUuid: state => uuid => {
+        return state.fsHist.filter((item) => {
             return item.uuid === uuid
         })
     }

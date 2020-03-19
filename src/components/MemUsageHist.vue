@@ -2,13 +2,14 @@
     <div>
         <h2>Memory usage history in %</h2>
         <div class="chartContainer">
-            <line-chart :chartData="lineChartData" :options="lineOptions" :styles="styles"></line-chart>
+            <line-chart :chartData="dataset" :options="lineOptions" :styles="styles"></line-chart>
         </div>
     </div>
 </template>
 
 <script>
 import LineChart from '../charts/LineChart.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: 'CurMemUsage',
@@ -17,46 +18,6 @@ export default {
     },
     data () {
         return {
-            lineChartData: {
-                labels: ['1', '2', '3', '4'],
-                datasets: [
-                    {
-                        label: 'Used',
-                        fill: false,
-                        backgroundColor: '#8BC34A',
-                        borderColor: '#8BC34A',
-                        data: [25, 10, 45, 20]
-                    },
-                    {
-                        label: 'Buffered',
-                        fill: false,
-                        backgroundColor: '#29B6F6',
-                        borderColor: '#29B6F6',
-                        data: [13, 20, 40, 10]
-                    },
-                    {
-                        label: 'Cached',
-                        fill: false,
-                        backgroundColor: '#FFCA28',
-                        borderColor: '#FFCA28',
-                        data: [30, 70, 20, 50]
-                    },
-                    {
-                        label: 'Free',
-                        fill: true,
-                        backgroundColor: '#607D8B',
-                        borderColor: '#607D8B',
-                        data: [75, 90, 55, 80]
-                    },
-                    {
-                        label: 'In Swap',
-                        fill: false,
-                        backgroundColor: '#f44336',
-                        borderColor: '#f44336',
-                        data: [1, 5, 2, 10]
-                    }
-                ]
-            },
             lineOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -94,6 +55,54 @@ export default {
                 height: '300px'
             }
         }
+    },
+    mounted () {
+        this.$store.dispatch('SYSMON/MEMHIST/GET_MEM_HIST')
+    },
+    computed: {
+        dataset () {
+            return {
+                labels: this.memHist.timestamps,
+                datasets: [
+                    {
+                        label: 'Used',
+                        fill: false,
+                        backgroundColor: '#8BC34A',
+                        borderColor: '#8BC34A',
+                        data: this.memHist.used
+                    },
+                    {
+                        label: 'Buffered',
+                        fill: false,
+                        backgroundColor: '#29B6F6',
+                        borderColor: '#29B6F6',
+                        data: this.memHist.buffered
+                    },
+                    {
+                        label: 'Cached',
+                        fill: false,
+                        backgroundColor: '#FFCA28',
+                        borderColor: '#FFCA28',
+                        data: this.memHist.cached
+                    },
+                    {
+                        label: 'Free',
+                        fill: true,
+                        backgroundColor: '#607D8B',
+                        borderColor: '#607D8B',
+                        data: this.memHist.free
+                    },
+                    {
+                        label: 'In Swap',
+                        fill: false,
+                        backgroundColor: '#f44336',
+                        borderColor: '#f44336',
+                        data: this.memHist.swap
+                    }
+                ]
+            }
+        },
+        ...mapState('SYSMON/MEMHIST', ['memHist'])
     }
 }
 </script>

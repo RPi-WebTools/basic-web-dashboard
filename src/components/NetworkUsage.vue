@@ -1,13 +1,14 @@
 <template>
     <div>
         <div class="chartContainer">
-            <bar-chart :chartData="barChartData" :options="barOptions" :styles="styles"></bar-chart>
+            <bar-chart :chartData="dataset" :options="barOptions" :styles="styles"></bar-chart>
         </div>
     </div>
 </template>
 
 <script>
 import BarChart from '../charts/BarChart.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: 'NetworkUsage',
@@ -16,21 +17,6 @@ export default {
     },
     data () {
         return {
-            barChartData: {
-                labels: ['1', '2', '3'],
-                datasets: [
-                    {
-                        label: 'Network input per day',
-                        backgroundColor: '#8BC34A',
-                        data: [25, 16, 24]
-                    },
-                    {
-                        label: 'Network output per day',
-                        backgroundColor: '#29B6F6',
-                        data: [5, 6, 2]
-                    }
-                ]
-            },
             barOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -60,7 +46,8 @@ export default {
                             fontColor: '#fafafa'
                         },
                         gridLines: {
-                            color: '#fafafa'
+                            color: '#fafafa',
+                            borderDash: [4, 15]
                         }
                     }]
                 }
@@ -69,6 +56,29 @@ export default {
                 height: '300px'
             }
         }
+    },
+    mounted () {
+        this.$store.dispatch('SYSMON/NETHIST/GET_NET_HIST')
+    },
+    computed: {
+        dataset () {
+            return {
+                labels: this.netHist.timestamps,
+                datasets: [
+                    {
+                        label: 'Network input per day',
+                        backgroundColor: '#8BC34A',
+                        data: this.netHist.rx
+                    },
+                    {
+                        label: 'Network output per day',
+                        backgroundColor: '#29B6F6',
+                        data: this.netHist.tx
+                    }
+                ]
+            }
+        },
+        ...mapState('SYSMON/NETHIST', ['netHist'])
     }
 }
 </script>

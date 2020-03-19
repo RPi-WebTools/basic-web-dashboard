@@ -147,13 +147,13 @@
                     <md-card>
                         <md-card-header class="text-title" style="font-size: 20px;">Used capacity in %</md-card-header>
                         <md-card-content>
-                            <DoughnutChart :chartData="doughnutChartData" :options="doughnutOptions" :styles="doughnutStyles"/>
+                            <DoughnutChart :chartData="datasetCap" :options="doughnutOptions" :styles="doughnutStyles"/>
                         </md-card-content>
                     </md-card>
                     <md-card>
                         <md-card-header class="text-title" style="font-size: 20px;">Disk partitions:</md-card-header>
                         <md-card-content>
-                            <DoughnutChart :chartData="doughnutChartData" :options="doughnutOptions" :styles="doughnutStyles"/>
+                            <DoughnutChart :chartData="datasetPart" :options="doughnutOptions" :styles="doughnutStyles"/>
                         </md-card-content>
                     </md-card>
                 </div>
@@ -182,6 +182,7 @@
 import DoughnutChart from '@/charts/DoughnutChart.vue'
 import FsReadHist from '@/components/FsReadHist.vue'
 import FsWriteHist from '@/components/FsWriteHist.vue'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'StorageMedium',
@@ -196,7 +197,6 @@ export default {
     },
     data () {
         return {
-            doughnutChartData: null,
             doughnutOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -219,11 +219,14 @@ export default {
     },
     created () {
         this.$emit('created', this.$props.uuid)
-        this.setChartData()
     },
-    methods: {
-        setChartData () {
-            this.doughnutChartData = {
+    /* mounted () {
+        this.$store.dispatch('SYSMON/FSINFO/GET_FS_INFO')
+    }, */
+    computed: {
+        datasetCap () {
+            const item = this.fsInfoByUuid(this.$props.uuid)[0]
+            return {
                 labels: ['Used', 'Free'],
                 datasets: [
                     {
@@ -231,11 +234,48 @@ export default {
                             '#607D8B', // used
                             '#29B6F6' // free
                         ],
-                        data: [this.$props.fsDetails.usedPercentage, 100 - this.$props.fsDetails.usedPercentage]
+                        data: [item.usedPercentage, 100 - item.usedPercentage]
                     }
                 ]
             }
         },
+        datasetPart () {
+            const item = this.fsInfoByUuid(this.$props.uuid)[0]
+            let partitioning = []
+            if (item.partitions.length > 1) {
+                let totalPartitionSize = 0
+                item.partitions.forEach(element => {
+                    partitioning.push(element)
+                    totalPartitionSize += element
+                })
+                if ((item.size - totalPartitionSize) > 10) partitioning.push(item.size - totalPartitionSize)
+            } else if (item.partitions > 0) {
+                if (item.partitions[0] === item.size) partitioning = item.partitions
+                else {
+                    partitioning.push(item.partitions[0])
+                    partitioning.push(item.size - item.partitions[0])
+                }
+            }
+
+            const partLabels = item.partitionLabels
+            if (item.partitionLabels.length !== partitioning.length) {
+                const diff = partitioning.length - item.partitionLabels.length
+                for (let i = 0; i < diff; i++) {
+                    partLabels.push('Empty')
+                }
+            }
+            return {
+                labels: partLabels,
+                datasets: [
+                    {
+                        data: partitioning
+                    }
+                ]
+            }
+        },
+        ...mapGetters('SYSMON/FSINFO', ['fsInfoByUuid'])
+    },
+    methods: {
         bytesToGbytes (bytes) {
             const raw = bytes / Math.pow(1024, 3)
             return +raw.toFixed(2)

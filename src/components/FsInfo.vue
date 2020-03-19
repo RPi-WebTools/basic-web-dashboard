@@ -40,6 +40,7 @@ export default {
     },
     mounted () {
         this.$store.dispatch('SYSMON/FSINFO/GET_FS_INFO')
+        this.$store.dispatch('SYSMON/FSHIST/GET_FS_HIST')
     },
     computed: {
         ...mapState('SYSMON/FSINFO', ['fsInfo'])
