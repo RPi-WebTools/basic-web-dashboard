@@ -13,7 +13,7 @@ const state = {
 
 const actions = {
     GET_MEM_HIST ({ commit }) {
-        const url = '/memHist'
+        const url = '/sysmon/memHist'
         API.get(url).then((result) => {
             var data = {}
             data.timestamps = result.data.timestamps

@@ -10,7 +10,7 @@ const state = {
 
 const actions = {
     GET_NET_HIST ({ commit }) {
-        const url = '/netHist'
+        const url = '/sysmon/netHist'
         API.get(url).then((result) => {
             var data = {}
             data.timestamps = result.data.timestamps

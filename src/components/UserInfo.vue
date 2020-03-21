@@ -79,13 +79,24 @@ export default {
     },
     computed: {
         dataset () {
-            const colors = ['#8BC34A', '#29B6F6', '#FFCA28', '#f44336', '#ff9800']
+            const bgColors = [
+                '#8BC34A',
+                '#29B6F6',
+                '#FFCA28',
+                '#f44336',
+                '#ff9800'
+            ]
+            for (let i = 0; i < (this.userHist.users.length - 6); i++) {
+                bgColors.push(this.getRandomColor())
+            }
+            bgColors.push('#29B6F6')
+
             const datasets = []
             let i = 0
             for (const [key, val] of Object.entries(this.userHist.users)) {
                 datasets.push({
                     label: key,
-                    backgroundColor: colors[i],
+                    backgroundColor: bgColors[i],
                     data: val
                 })
                 i += 1
@@ -98,6 +109,16 @@ export default {
         },
         ...mapState('SYSMON/USERINFO', ['userInfo']),
         ...mapState('SYSMON/USERHIST', ['userHist'])
+    },
+    methods: {
+        getRandomColor () {
+            const letters = '0123456789ABCDEF'.split('')
+            let color = '#'
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)]
+            }
+            return color
+        }
     }
 }
 </script>

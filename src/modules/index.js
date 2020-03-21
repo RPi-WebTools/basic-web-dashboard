@@ -5,7 +5,6 @@ const modules = {}
 
 requireModule.keys().forEach(file => {
     const moduleName = file.replace(/(\.\/|\.module\.js)/g, '').toUpperCase()
-    console.log(moduleName)
     modules[moduleName] = requireModule(file).default || requireModule(file)
 })
 

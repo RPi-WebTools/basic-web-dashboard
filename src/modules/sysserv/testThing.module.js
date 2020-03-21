@@ -17,7 +17,7 @@ const state = {
 
 const actions = {
     GET_TEST_DATA ({ commit }) {
-        const url = '/testData'
+        const url = '/sysserv/testData'
         API.get(url).then((result) => {
             var data = {}
             data.a = result.data.a

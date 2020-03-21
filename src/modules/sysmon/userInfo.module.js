@@ -14,7 +14,7 @@ const state = {
 
 const actions = {
     GET_USER_INFO ({ commit }) {
-        const url = '/userInfo'
+        const url = '/sysmon/userInfo'
         API.get(url).then((result) => {
             commit('SET_USER_INFO', result.data)
         }, (err) => {

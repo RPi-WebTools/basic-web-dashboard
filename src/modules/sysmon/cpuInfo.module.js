@@ -9,7 +9,7 @@ const state = {
 
 const actions = {
     GET_CPU_INFO ({ commit }) {
-        const url = '/cpuInfo'
+        const url = '/sysmon/cpuInfo'
         API.get(url).then((result) => {
             var data = {}
             data.curCpuLoad = result.data.curCpuLoad

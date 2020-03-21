@@ -6,7 +6,7 @@ const state = {
 
 const actions = {
     GET_FS_HIST ({ commit }) {
-        const url = '/fsHist'
+        const url = '/sysmon/fsHist'
         API.get(url).then((result) => {
             commit('SET_FS_HIST', result.data)
         }, (err) => {

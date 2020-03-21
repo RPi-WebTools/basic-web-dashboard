@@ -264,10 +264,23 @@ export default {
                     partLabels.push('Empty')
                 }
             }
+
+            const bgColors = [
+                '#f44336',
+                '#8BC34A',
+                '#FFCA28',
+                '#607D8B',
+                '#ff9800'
+            ]
+            for (let i = 0; i < (partitioning.length - 6); i++) {
+                bgColors.push(this.getRandomColor())
+            }
+            bgColors.push('#29B6F6')
             return {
                 labels: partLabels,
                 datasets: [
                     {
+                        backgroundColor: bgColors,
                         data: partitioning
                     }
                 ]
@@ -279,6 +292,14 @@ export default {
         bytesToGbytes (bytes) {
             const raw = bytes / Math.pow(1024, 3)
             return +raw.toFixed(2)
+        },
+        getRandomColor () {
+            const letters = '0123456789ABCDEF'.split('')
+            let color = '#'
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)]
+            }
+            return color
         }
     }
 }

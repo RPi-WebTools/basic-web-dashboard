@@ -17,7 +17,7 @@ const state = {
 
 const actions = {
     GET_DEV_INFO ({ commit }) {
-        const url = '/deviceInfo'
+        const url = '/sysmon/devInfo'
         API.get(url).then((result) => {
             var data = {}
             data.manufacturer = result.data.manufacturer

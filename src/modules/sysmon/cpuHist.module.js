@@ -10,7 +10,7 @@ const state = {
 
 const actions = {
     GET_CPU_HIST ({ commit }) {
-        const url = '/cpuHist'
+        const url = '/sysmon/cpuHist'
         API.get(url).then((result) => {
             var data = {}
             data.timestamps = result.data.timestamps

@@ -10,7 +10,7 @@ const state = {
 
 const actions = {
     GET_MEM_INFO ({ commit }) {
-        const url = '/memInfo'
+        const url = '/sysmon/memInfo'
         API.get(url).then((result) => {
             var data = {}
             data.curMemUsed = result.data.curMemUsed

@@ -66,7 +66,7 @@ export default {
                 datasets: [
                     {
                         label: 'Used',
-                        fill: false,
+                        fill: true,
                         backgroundColor: '#8BC34A',
                         borderColor: '#8BC34A',
                         data: this.memHist.used
@@ -87,7 +87,7 @@ export default {
                     },
                     {
                         label: 'Free',
-                        fill: true,
+                        fill: false,
                         backgroundColor: '#607D8B',
                         borderColor: '#607D8B',
                         data: this.memHist.free

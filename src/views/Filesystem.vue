@@ -78,7 +78,14 @@ export default {
                 used: 794093477888,
                 usedPercentage: 79.3933904540894,
                 uuid: 'eluwgg-398z93',
-                smart: 'Ok'
+                smart: 'Ok',
+                vendor: 'TOSHIBA',
+                modelName: 'External_USB_3.0',
+                interface: 'USB',
+                diskType: 'HD',
+                removable: false,
+                partitionLabels: ['Part1', 'Part2', 'Part3'],
+                partitions: [264697825962, 264697825962, 264125442752]
             }
         }
     }

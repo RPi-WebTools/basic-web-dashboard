@@ -16,7 +16,7 @@ const state = {
 
 const actions = {
     GET_NET_INFO ({ commit }) {
-        const url = '/netInfo'
+        const url = '/sysmon/netInfo'
         API.get(url).then((result) => {
             commit('SET_NET_INFO', result.data)
         }, (err) => {

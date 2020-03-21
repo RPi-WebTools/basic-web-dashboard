@@ -4,7 +4,7 @@
             <h1 class="md-layout-item">Network</h1>
             <div class="md-layout-item" style="display: flex; align-items: center;">
                 <span style="flex-grow: 1;"></span>
-                <md-button class="md-icon-button md-primary">
+                <md-button class="md-icon-button md-primary" @click="requestNewData">
                     <md-icon :md-src="require('../assets/sync-solid.svg')"></md-icon>
                     <md-tooltip md-direction="bottom">Request new data</md-tooltip>
                 </md-button>
@@ -44,6 +44,13 @@ export default {
     data () {
         return {
             latestTimestamp: '07.03.20 13:00'
+        }
+    },
+    methods: {
+        requestNewData () {
+            setTimeout(function () {
+                alert('Test')
+            }, 3000)
         }
     }
 }
