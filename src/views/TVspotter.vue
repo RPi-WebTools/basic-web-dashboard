@@ -4,6 +4,6 @@
 
 <script>
 export default {
-    name: 'Docker'
+    name: 'TVspotter'
 }
 </script>

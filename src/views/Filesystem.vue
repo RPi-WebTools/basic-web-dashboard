@@ -1,5 +1,5 @@
 <template>
-    <div class="CpuAndMemory">
+    <div class="Filesystem">
         <div class="md-layout md-alignment-center-space-between">
             <h1 class="md-layout-item">Storage</h1>
             <div class="md-layout-item" style="display: flex; align-items: center;">
@@ -12,7 +12,6 @@
             </div>
         </div>
 
-        <br>
         <div class="md-layout md-gutter md-alignment-center">
             <div class="md-layout-item">
                 <md-card>

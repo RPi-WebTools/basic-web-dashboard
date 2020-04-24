@@ -3,6 +3,8 @@
         <h1>This is an about page</h1>
         <p>There should be data coming your way...watch out!</p>
         <p>{{ testData }}</p>
+
+        <p>This product uses the TMDb API but is not endorsed or certified by TMDb.</p>
     </div>
 </template>
 
