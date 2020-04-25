@@ -4,11 +4,8 @@
             <h1 class="md-layout-item">TV</h1>
             <div class="md-layout-item" style="display: flex; align-items: center;">
                 <span style="flex-grow: 1;"></span>
-                <md-button class="md-icon-button md-primary">
-                    <md-icon :md-src="require('../assets/sync-solid.svg')"></md-icon>
-                    <md-tooltip md-direction="bottom">Request new data</md-tooltip>
-                </md-button>
-                <md-chip class="md-primary">Data from: {{ latestTimestamp }}</md-chip>
+                <span>Data obtained from: </span>
+                <img id="tmdb-logo" :src="require('../assets/tmdb-logo.svg')" alt="TMDb">
             </div>
         </div>
     </div>
@@ -26,5 +23,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+#tmdb-logo {
+    height: 20px;
+    width: auto;
+    padding-left: 10px;
+}
 </style>
