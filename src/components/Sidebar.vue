@@ -1,5 +1,5 @@
 <template>
-    <md-list :style="{ backgroundImage: 'url(' + image + ')', backgroundSize: 'cover', backgroundPosition: 'center center' }">
+    <!--<md-list :style="{ backgroundImage: 'url(' + image + ')', backgroundSize: 'cover', backgroundPosition: 'center center' }">
         <md-list-item>
             <md-avatar>
                 <img src="@/assets/rpi-webtools.png" alt="Logo">
@@ -19,135 +19,175 @@
                 </md-list-item>
             </md-list>
         </md-list-item>
-    </md-list>
+    </md-list>-->
+    <v-list rounded>
+        <v-list-group color="primary" v-for="(link, index) in links" :key="index" v-model="link.active">
+            <!--<v-list-group v-if="link.expandable">
+                <v-icon slot="prependIcon" v-text="link.src" style="max-width: 24px;"></v-icon>
+                <template v-slot:activator>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="link.title"></v-list-item-title>
+                    </v-list-item-content>
+                </template>
+
+                <v-list-item v-for="(sub, subIndex) in link.sub" :key="subIndex" :to="sub.to">
+                    <v-list-item-icon>
+                        <v-icon v-text="sub.src" style="max-width: 24px;"></v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="sub.title"></v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list-group>
+
+            <v-list-group v-else append-icon="">
+                <v-icon slot="prependIcon" v-text="link.src" style="max-width: 24px;"></v-icon>
+                <template v-slot:activator>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="link.title"></v-list-item-title>
+                    </v-list-item-content>
+                </template>
+            </v-list-group>-->
+            <v-list-tile slot="link" :to="link.to">
+                <v-list-tile-action>
+                    <v-icon v-text="link.src" style="max-width: 24px;"></v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title >{{ link.title }}</v-list-tile-title>
+                </v-list-tile-content>
+                <v-list-tile-action v-if="link.sub.length > 0">
+                    <v-icon>keyboard_arrow_down</v-icon>
+                </v-list-tile-action>
+            </v-list-tile>
+        </v-list-group>
+    </v-list>
 </template>
 
 <script>
 export default {
     name: 'Sidebar',
-    props: [
-        'title'
-    ],
     data () {
         return {
-            image: require('../assets/sidebarBG.png'),
             links: [
                 {
-                    id: 0,
                     title: 'Home',
                     to: 'Home',
-                    src: require('../assets/home-solid.svg'),
-                    expandable: false
+                    // src: require('../assets/home-solid.svg'),
+                    src: 'fas fa-home',
+                    expandable: false,
+                    sub: []
                 },
                 {
-                    id: 1,
                     title: 'Dashboard',
-                    src: require('../assets/chart-pie-solid.svg'),
+                    // src: require('../assets/chart-pie-solid.svg'),
+                    src: 'fas fa-chart-pie',
                     expandable: true,
                     sub: [
                         {
-                            id: 0,
                             title: 'CPU & Memory',
                             to: 'CpuAndMemory',
-                            src: require('../assets/microchip-solid.svg'),
+                            // src: require('../assets/microchip-solid.svg'),
+                            src: 'fas fa-microchip',
                             expandable: false
                         },
                         {
-                            id: 1,
                             title: 'Network',
                             to: 'Network',
-                            src: require('../assets/network-wired-solid.svg'),
+                            // src: require('../assets/network-wired-solid.svg'),
+                            src: 'fas fa-network-wired',
                             expandable: false
                         },
                         {
-                            id: 2,
                             title: 'Storage',
                             to: 'Filesystem',
-                            src: require('../assets/hdd-solid.svg'),
+                            // src: require('../assets/hdd-solid.svg'),
+                            src: 'fas fa-hdd',
                             expandable: false
                         }
                     ]
                 },
                 {
-                    id: 2,
                     title: 'Docker',
-                    src: require('../assets/docker-brands.svg'),
+                    // src: require('../assets/docker-brands.svg'),
+                    src: 'fab fa-docker',
                     expandable: true,
                     sub: [
                         {
-                            id: 0,
                             title: 'Manage',
                             to: 'DockerManage',
-                            src: require('../assets/tasks-solid.svg'),
+                            // src: require('../assets/tasks-solid.svg'),
+                            src: 'fas fa-tasks',
                             expandable: false
                         },
                         {
-                            id: 1,
                             title: 'Baïkal',
                             to: 'Baikal',
-                            src: require('../assets/calendar-alt-solid.svg'),
+                            // src: require('../assets/calendar-alt-solid.svg'),
+                            src: 'fas fa-calendar-alt',
                             expandable: false
                         }
                     ]
                 },
                 {
-                    id: 3,
                     title: 'Gitea',
-                    src: require('../assets/git-square-brands.svg'),
+                    // src: require('../assets/git-square-brands.svg'),
+                    src: 'fab fa-git-square',
                     expandable: true,
                     sub: [
                         {
-                            id: 0,
                             title: 'Statistics',
                             to: 'GiteaStatistics',
-                            src: require('../assets/clipboard-list-solid.svg'),
+                            // src: require('../assets/clipboard-list-solid.svg'),
+                            src: 'fas fa-clipboard-list',
                             expandable: false
                         },
                         {
-                            id: 1,
                             title: 'Configuration',
                             to: 'GiteaConfig',
-                            src: require('../assets/cogs-solid.svg'),
+                            // src: require('../assets/cogs-solid.svg'),
+                            src: 'fas fa-cogs',
                             expandable: false
                         }
                     ]
                 },
                 {
-                    id: 4,
                     title: 'System Services',
                     to: 'SysServ',
-                    src: require('../assets/server-solid.svg'),
-                    expandable: false
+                    // src: require('../assets/server-solid.svg'),
+                    src: 'fas fa-server',
+                    expandable: false,
+                    sub: []
                 },
                 {
-                    id: 5,
                     title: 'TVspotter',
-                    src: require('../assets/tmdb-logo-square.svg'),
+                    // src: require('../assets/tmdb-logo-square.svg'),
+                    src: '$vuetify.icons.tmdbLogoSquare',
                     expandable: true,
                     sub: [
                         {
-                            id: 0,
                             title: 'Movies',
                             to: 'Movies',
-                            src: require('../assets/film-solid.svg'),
+                            // src: require('../assets/film-solid.svg'),
+                            src: 'fas fa-film',
                             expandable: false
                         },
                         {
-                            id: 1,
                             title: 'TV shows',
                             to: 'TV',
-                            src: require('../assets/tv-solid.svg'),
+                            // src: require('../assets/tv-solid.svg'),
+                            src: 'fas fa-tv',
                             expandable: false
                         }
                     ]
                 },
                 {
-                    id: 6,
                     title: 'About',
                     to: 'About',
-                    src: require('../assets/flag-solid.svg'),
+                    // src: require('../assets/flag-solid.svg'),
+                    src: 'fas fa-flag',
                     expandable: false,
-                    divider: true
+                    divider: true,
+                    sub: []
                 }
             ]
         }

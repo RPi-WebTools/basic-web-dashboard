@@ -1,7 +1,16 @@
 <template>
     <div id="layout">
-        <sidebar class="sidebar" title="RPi Dashboard"></sidebar>
-        <router-view class="main"></router-view>
+        <v-navigation-drawer app clipped :src="require('../assets/sidebarBG.png')" v-model="state">
+            <sidebar/>
+        </v-navigation-drawer>
+
+        <v-content>
+            <v-container fluid>
+                <v-fade-transition mode="out-in">
+                    <router-view></router-view>
+                </v-fade-transition>
+            </v-container>
+        </v-content>
     </div>
 </template>
 
@@ -11,39 +20,22 @@ import Sidebar from '../components/Sidebar.vue'
 export default {
     components: {
         Sidebar
+    },
+    props: [
+        'navState'
+    ],
+    data: () => {
+        return {
+            state: true
+        }
+    },
+    watch: {
+        navState () {
+            this.state = this.navState
+        }
     }
 }
 </script>
 
 <style scoped>
-#layout {
-    display: -webkit-flex;
-    display: flex;
-    min-height: 100%;
-    height: 100%;
-}
-.sidebar {
-    -webkit-flex: 0.5;
-    -ms-flex: 0.5;
-    flex: 0.6;
-    width: 250px;
-    min-height: 100%;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-}
-.main {
-    -webkit-flex: 4;
-    -ms-flex: 4;
-    flex: 4;
-    min-height: 100%;
-    padding: 20px;
-    padding-left: 270px;
-}
-@media (max-width: 600px) {
-  #layout {
-    -webkit-flex-direction: column;
-    flex-direction: column;
-  }
-}
 </style>
