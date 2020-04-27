@@ -20,7 +20,7 @@
             <sidebar/>
         </v-navigation-drawer>
 
-        <v-content>
+        <v-content class="pa-7">
             <v-container fluid>
                 <v-fade-transition mode="out-in">
                     <router-view></router-view>

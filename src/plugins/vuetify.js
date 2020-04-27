@@ -14,12 +14,13 @@ export default new Vuetify({
         themes: {
             dark: {
                 primary: colors.orange.base,
-                secondary: '#607d8b',
+                secondary: colors.blueGrey.base,
                 accent: colors.blue.base,
                 error: colors.red.base,
                 warning: colors.amber.base,
                 info: colors.indigo.base,
-                success: colors.green.base
+                success: colors.green.base,
+                background: colors.grey.darken3
             }
         }
     },
