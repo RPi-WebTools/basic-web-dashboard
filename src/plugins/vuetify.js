@@ -21,6 +21,16 @@ export default new Vuetify({
                 info: colors.indigo.base,
                 success: colors.green.base,
                 background: colors.grey.darken3
+            },
+            light: {
+                primary: colors.orange.base,
+                secondary: colors.blueGrey.base,
+                accent: colors.blue.base,
+                error: colors.red.base,
+                warning: colors.amber.base,
+                info: colors.indigo.base,
+                success: colors.green.base,
+                background: colors.grey.lighten3
             }
         }
     },

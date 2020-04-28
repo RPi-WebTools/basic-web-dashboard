@@ -1,24 +1,17 @@
 <template>
-    <div class="md-layout md-gutter md-alignment-center">
-        <div class="md-layout-item">
-            <md-table :value="userInfo" md-sort="num" md-sort-order="asc">
-                <md-table-toolbar>
-                    <h2 class="md-title">User Info</h2>
-                </md-table-toolbar>
-
-                <md-table-row slot="md-table-row" slot-scope="{ item }">
-                    <md-table-cell md-label="No" md-sort-by="num" md-numeric>{{ item.num }}</md-table-cell>
-                    <md-table-cell md-label="User" md-sort-by="user">{{ item.user }}</md-table-cell>
-                    <md-table-cell md-label="Terminal" md-sort-by="terminal">{{ item.terminal }}</md-table-cell>
-                    <md-table-cell md-label="Last Login Date" md-sort-by="loginDate">{{ item.loginDate }} {{ item.loginTime }}</md-table-cell>
-                    <md-table-cell md-label="IP" md-sort-by="ip">{{ item.ip }}</md-table-cell>
-                    <md-table-cell md-label="Last Command" md-sort-by="lastCmd">{{ item.lastCmd }}</md-table-cell>
-                </md-table-row>
-            </md-table>
-        </div>
-        <div class="md-layout-item">
-            <bar-chart :chartData="dataset" :options="barOptions" :styles="styles"></bar-chart>
-        </div>
+    <div>
+        <p class="headline">User Info</p>
+        <v-container fluid>
+            <v-row>
+                <v-col cols="12" md="6">
+                    <v-data-table :headers="headers" :items="userInfo" :items-per-page="-1" class="elevation-1">
+                    </v-data-table>
+                </v-col>
+                <v-col cols="12" md="6">
+                    <BarChart :chartData="dataset" :options="barOptions" :styles="styles"></BarChart>
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 </template>
 
@@ -33,41 +26,14 @@ export default {
     },
     data () {
         return {
-            barOptions: {
-                responsive: true,
-                maintainAspectRatio: false,
-                title: {
-                    display: true,
-                    text: 'User login count history',
-                    fontColor: '#fafafa',
-                    fontSize: 20
-                },
-                legend: {
-                    labels: {
-                        fontColor: '#fafafa'
-                    }
-                },
-                scales: {
-                    xAxes: [{
-                        ticks: {
-                            fontColor: '#fafafa'
-                        },
-                        gridLines: {
-                            color: '#fafafa'
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            fontColor: '#fafafa'
-                        },
-                        gridLines: {
-                            color: '#fafafa',
-                            borderDash: [4, 15]
-                        }
-                    }]
-                }
-            },
+            headers: [
+                { text: 'No.', value: 'num' },
+                { text: 'User', value: 'user' },
+                { text: 'Terminal', value: 'terminal' },
+                { text: 'Last Login Date', value: 'loginDate' },
+                { text: 'IP', value: 'ip' },
+                { text: 'Last Command', value: 'lastCmd' }
+            ],
             styles: {
                 height: '300px'
             }
@@ -78,18 +44,24 @@ export default {
         this.$store.dispatch('SYSMON/USERHIST/GET_USER_HIST')
     },
     computed: {
+        theme () {
+            return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+        },
+        chartFontColour () {
+            return (this.$vuetify.theme.dark) ? '#ffffff' : '#616161'
+        },
         dataset () {
             const bgColors = [
-                '#8BC34A',
-                '#29B6F6',
-                '#FFCA28',
-                '#f44336',
-                '#ff9800'
+                this.$vuetify.theme.themes[this.theme].success,
+                this.$vuetify.theme.themes[this.theme].accent,
+                this.$vuetify.theme.themes[this.theme].warning,
+                this.$vuetify.theme.themes[this.theme].error,
+                this.$vuetify.theme.themes[this.theme].primary
             ]
             for (let i = 0; i < (this.userHist.users.length - 6); i++) {
                 bgColors.push(this.getRandomColor())
             }
-            bgColors.push('#29B6F6')
+            bgColors.push(this.$vuetify.theme.themes[this.theme].secondary)
 
             const datasets = []
             let i = 0
@@ -105,6 +77,48 @@ export default {
             return {
                 labels: this.userHist.timestamps,
                 datasets: datasets
+            }
+        },
+        barOptions () {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'User login count history',
+                    fontColor: this.chartFontColour,
+                    fontSize: 20
+                },
+                legend: {
+                    labels: {
+                        fontColor: this.chartFontColour
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontColor: this.chartFontColour
+                        },
+                        gridLines: {
+                            color: this.chartFontColour
+                        },
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            parser: 'x'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontColor: this.chartFontColour
+                        },
+                        gridLines: {
+                            color: this.chartFontColour,
+                            borderDash: [4, 15]
+                        }
+                    }]
+                }
             }
         },
         ...mapState('SYSMON/USERINFO', ['userInfo']),

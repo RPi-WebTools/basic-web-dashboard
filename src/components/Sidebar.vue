@@ -1,5 +1,5 @@
 <template>
-    <v-list rounded>
+    <v-list rounded dark>
         <template v-for="(link, i) in links">
             <v-divider v-if="link.divider" :key="'dividier-' + i"/>
             <v-list-group v-if="link.expandable" :key="i" style="margin-top: 5px; margin-bottom: 5px;">
@@ -16,6 +16,7 @@
                     :to="{ name: sub.to }"
                     router
                     exact
+                    color="primary"
                 >
                     <v-list-item-icon>
                         <v-icon v-text="sub.src" style="max-width: 24px;"></v-icon>
@@ -32,6 +33,7 @@
                 router
                 exact
                 style="margin-top: 5px;"
+                color="primary"
             >
                 <v-list-item-icon>
                     <v-icon v-text="link.src" style="max-width: 24px;"></v-icon>
@@ -65,7 +67,7 @@ export default {
                     sub: [
                         {
                             title: 'CPU & Memory',
-                            to: 'CpuAndMemory',
+                            to: 'CPU & Memory',
                             src: 'fas fa-microchip',
                             expandable: false
                         },
@@ -77,7 +79,7 @@ export default {
                         },
                         {
                             title: 'Storage',
-                            to: 'Filesystem',
+                            to: 'Storage',
                             src: 'fas fa-hdd',
                             expandable: false
                         }
@@ -90,13 +92,13 @@ export default {
                     sub: [
                         {
                             title: 'Manage',
-                            to: 'DockerManage',
+                            to: 'Manage Docker',
                             src: 'fas fa-tasks',
                             expandable: false
                         },
                         {
                             title: 'Baïkal',
-                            to: 'Baikal',
+                            to: 'Baïkal',
                             src: 'fas fa-calendar-alt',
                             expandable: false
                         }
@@ -109,13 +111,13 @@ export default {
                     sub: [
                         {
                             title: 'Statistics',
-                            to: 'GiteaStatistics',
+                            to: 'Gitea Statistics',
                             src: 'fas fa-clipboard-list',
                             expandable: false
                         },
                         {
                             title: 'Configuration',
-                            to: 'GiteaConfig',
+                            to: 'Gitea Config',
                             src: 'fas fa-cogs',
                             expandable: false
                         }
@@ -123,7 +125,7 @@ export default {
                 },
                 {
                     title: 'System Services',
-                    to: 'SysServ',
+                    to: 'System Services',
                     src: 'fas fa-server',
                     expandable: false,
                     sub: []

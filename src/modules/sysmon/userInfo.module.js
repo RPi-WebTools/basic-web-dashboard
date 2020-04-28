@@ -1,7 +1,7 @@
 import API from '../../api'
 
 const state = {
-    userInfo: {
+    userInfo: [{
         num: 0,
         user: '',
         terminal: '',
@@ -9,7 +9,7 @@ const state = {
         loginTime: '',
         ip: '',
         lastCmd: ''
-    }
+    }]
 }
 
 const actions = {

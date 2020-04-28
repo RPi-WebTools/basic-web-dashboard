@@ -1,30 +1,42 @@
 <template>
     <div>
-        <h2>Storage capacity</h2>
-        <div class="grid">
-            <div class="item table">
-                <md-table :value="fsInfo">
-                    <md-table-row slot="md-table-row" slot-scope="{ item }">
-                        <md-table-cell md-label="Label">{{ item.label }}</md-table-cell>
-                        <md-table-cell md-label="Usage">
-                            <table>
+        <p class="headline">Storage capacity</p>
+        <v-container fluid>
+            <v-row>
+                <v-col cols="12" lg="6" align-self="center">
+                    <v-simple-table class="elevation-1">
+                        <template v-slot:default>
+                            <thead>
                                 <tr>
-                                    <td style="width: 30px; border: 0;">
-                                        <md-icon :md-src="require('../assets/hdd-regular.svg')"></md-icon>
-                                    </td>
-                                    <td style="border: 0; padding-left: 5px;">
-                                        <md-progress-bar md-mode="determinate" :md-value="item.usedPercentage" style="height: 10px;"></md-progress-bar>
+                                    <th class="text-left">Label</th>
+                                    <th class="text-left">Usage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(info, index) in fsInfo" :key="index">
+                                    <td>{{ info.label }}</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td style="width: 30px; border: 0;">
+                                                    <v-icon>fas fa-hdd</v-icon>
+                                                </td>
+                                                <td style="border: 0; padding-left: 5px;">
+                                                    <v-progress-linear :value="info.usedPercentage" height="10"></v-progress-linear>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
-                            </table>
-                        </md-table-cell>
-                    </md-table-row>
-                </md-table>
-            </div>
-            <div class="item chart">
-                <DoughnutChart :chartData="dataset" :options="doughnutOptions" :styles="styles"></DoughnutChart>
-            </div>
-        </div>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
+                </v-col>
+                <v-col cols="12" lg="6" align-self="center">
+                    <DoughnutChart :chartData="dataset" :options="doughnutOptions" :styles="styles"></DoughnutChart>
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 </template>
 
@@ -39,23 +51,12 @@ export default {
     },
     data () {
         return {
-            doughnutOptions: {
-                responsive: true,
-                maintainAspectRatio: false,
-                aspectRatio: 1,
-                title: {
-                    display: false
-                },
-                legend: {
-                    labels: {
-                        fontColor: '#fafafa'
-                    },
-                    position: 'right',
-                    align: 'middle'
-                }
-            },
+            headers: [
+                { text: 'Label', value: 'label' },
+                { text: 'Usage', value: 'usedPercentage' }
+            ],
             styles: {
-                height: '200px'
+                height: '250px'
             }
         }
     },
@@ -63,6 +64,12 @@ export default {
         this.$store.dispatch('SYSMON/FSINFO/GET_FS_INFO')
     },
     computed: {
+        theme () {
+            return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+        },
+        chartFontColour () {
+            return (this.$vuetify.theme.dark) ? '#ffffff' : '#616161'
+        },
         dataset () {
             let usedSpace = 0
             let totalSpace = 0
@@ -75,15 +82,33 @@ export default {
                 datasets: [
                     {
                         backgroundColor: [
-                            '#8BC34A', // used
-                            '#607D8B' // free
+                            this.$vuetify.theme.themes[this.theme].success, // used
+                            this.$vuetify.theme.themes[this.theme].secondary // free
                         ],
                         data: [
                             (usedSpace / totalSpace) * 100,
                             100 - (usedSpace / totalSpace) * 100
-                        ]
+                        ],
+                        borderColor: this.chartFontColour
                     }
                 ]
+            }
+        },
+        doughnutOptions () {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                aspectRatio: 1,
+                title: {
+                    display: false
+                },
+                legend: {
+                    labels: {
+                        fontColor: this.chartFontColour
+                    },
+                    position: 'bottom',
+                    align: 'middle'
+                }
             }
         },
         ...mapState('SYSMON/FSINFO', ['fsInfo'])
@@ -92,19 +117,4 @@ export default {
 </script>
 
 <style scoped>
-.grid {
-    display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-template-rows: repeat(auto-fill, auto);
-}
-
-.item {
-    color: #fafafa;
-}
-
-.table {
-    grid-column: 1;
-    grid-row: 1;
-}
 </style>
