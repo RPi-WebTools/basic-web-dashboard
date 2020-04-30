@@ -1,6 +1,5 @@
 <template>
-    <div class="wrapper">
-        <md-card v-for="(item, index) in itemList" :key="index" class="item" md-with-hover>
+        <!-- <md-card v-for="(item, index) in itemList" :key="index" class="item" md-with-hover>
             <md-card-media-cover md-solid>
                 <md-card-media>
                     <img v-if="!item.backdrop.endsWith('.svg')" :src="item.backdrop" alt="Backdrop" class="card-image">
@@ -18,8 +17,24 @@
                     </md-card-actions>
                 </md-card-area>
             </md-card-media-cover>
-        </md-card>
-    </div>
+        </md-card> -->
+    <v-container>
+        <v-row v-for="(item, index) in itemList" :key="index">
+            <v-col cols="12">
+                <v-card>
+                    <!-- <v-img :src="item.backdrop" max-height="300"> -->
+                        <div class="d-flex flex-no-wrap justify-space-between">
+                            <div>
+                                <v-card-title class="headline">{{ item.name }}</v-card-title>
+                                <v-card-subtitle>{{ item.firstRelease }}</v-card-subtitle>
+                            </div>
+                            <v-img max-height="300" max-width="400" :src="item.backdrop" gradient="to right, rgba(33,33,33,1) 0%, transparent 100%"></v-img>
+                        </div>
+                    <!-- </v-img> -->
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -32,21 +47,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 5px;
-}
-
-.item {
-    margin: 5px;
-    max-height: 300px;
-}
-
-.card-image {
-    max-width: 100%;
-    height: 300px;
-    opacity: 0.5;
-}
 </style>

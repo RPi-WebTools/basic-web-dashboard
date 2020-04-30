@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-app-bar app light color="primary" dense clipped-left>
-            <v-app-bar-nav-icon @click.stop="navState = !navState">
+            <v-app-bar-nav-icon id="navIcon" :class="['animated', 'faster', doAnim ? 'rotateIn' : '']" @click.stop="toggleNavDrawer">
             </v-app-bar-nav-icon>
 
             <v-img alt="Logo" class="mx-2 hidden-sm-and-down" contain max-width="40" max-height="40" src="@/assets/rpi-webtools-border.png"/>
@@ -42,7 +42,8 @@ export default {
     },
     data: () => {
         return {
-            navState: true
+            navState: true,
+            doAnim: false
         }
     },
     computed: {
@@ -53,6 +54,11 @@ export default {
     methods: {
         toggleTheme () {
             this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+        },
+        toggleNavDrawer () {
+            this.doAnim = true
+            this.navState = !this.navState
+            setTimeout(() => { this.doAnim = false }, 500)
         }
     }
 }

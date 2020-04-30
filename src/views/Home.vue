@@ -1,6 +1,6 @@
 <template>
     <v-container fluid class="py-0">
-        <v-row class="d-flex">
+        <v-row>
             <v-col cols="12" md="6">
                 <v-card class="px-2 pb-3 pt-1 cols-first-row-min-height" height="100%" tile>
                     <DeviceInfo />

@@ -1,14 +1,14 @@
 <template>
-    <div class="tv">
-        <div class="md-layout md-alignment-center-space-between">
-            <h1 class="md-layout-item">TV</h1>
-            <div class="md-layout-item" style="display: flex; align-items: center;">
-                <span style="flex-grow: 1;"></span>
-                <span>Data obtained from: </span>
-                <img id="tmdb-logo" :src="require('../assets/tmdb-logo.svg')" alt="TMDb">
-            </div>
-        </div>
-    </div>
+    <v-container fluid class="py-0">
+        <v-row>
+            <v-col cols="12">
+                <v-sheet class="px-2 text-right" color="background" elevation="0">
+                    <span>Data obtained from:</span>
+                    <v-icon v-text="logo" id="tmdb-logo"></v-icon>
+                </v-sheet>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -16,7 +16,8 @@ export default {
     name: 'TV',
     data () {
         return {
-            latestTimestamp: '07.03.20 13:00'
+            latestTimestamp: '07.03.20 13:00',
+            logo: '$vuetify.icons.tmdbLogo'
         }
     }
 }

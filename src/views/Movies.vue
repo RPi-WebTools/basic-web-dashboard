@@ -1,112 +1,98 @@
 <template>
-    <div class="movies">
-        <div class="md-layout md-alignment-center-space-between">
-            <h1 class="md-layout-item">Movies</h1>
-            <div class="md-layout-item" style="display: flex; align-items: center;">
-                <span style="flex-grow: 1;"></span>
-                <span>Data obtained from: </span>
-                <img id="tmdb-logo" :src="require('../assets/tmdb-logo.svg')" alt="TMDb">
-            </div>
-        </div>
+    <v-container fluid class="py-0">
+        <v-row>
+            <v-col cols="12">
+                <v-sheet class="px-2 text-right" color="background" elevation="0">
+                    <span>Data obtained from:</span>
+                    <v-icon v-text="logo" id="tmdb-logo"></v-icon>
+                </v-sheet>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <v-toolbar color="primary" light>
+                    <v-btn icon class="non-clickable"><v-icon>fas fa-search</v-icon></v-btn>
+                    <v-toolbar-title>Search for movies to add</v-toolbar-title>
+                </v-toolbar>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <div class="bordered pa-4">
+                    <v-form v-model="validSearch" @submit.prevent="send">
+                        <div class="flex-container">
+                            <v-text-field
+                                v-model="formSearch.search"
+                                :rules="searchRules"
+                                label="Search"
+                                required
+                                class="pr-4"
+                                style="flex-grow: 1"
+                            ></v-text-field>
+                            <v-btn outlined color="primary" :disabled="!validSearch || sending" type="submit">
+                                Search
+                            </v-btn>
+                        </div>
+                    </v-form>
 
-        <md-toolbar class="md-primary">
-            <md-icon :md-src="require('@/assets/search-solid.svg')"></md-icon>
-            <h3 class="md-title" style="flex: 1;">Search for movies to add</h3>
-        </md-toolbar>
-        <br>
-
-        <div class="bordered">
-            <form novalidate @submit.prevent="validateSearch">
-                <md-progress-bar md-mode="indeterminate" v-if="sending" />
-                <div class="flex-container">
-                    <div style="flex-grow: 1">
-                    <md-field :class="getValidationClass('search')">
-                        <label for="search">Enter search term</label>
-                        <md-input name="search" id="search" v-model="form.search" :disabled="sending" />
-                        <span class="md-error" v-if="!$v.form.search.required">Please enter a search term</span>
-                    </md-field>
-                    </div>
-                    <div>
-                    <md-button type="submit" class="md-primary" :disabled="sending">Search</md-button>
-                    </div>
+                    <TVspotterCarousel class="pt-2" :searchList="moviesSearched" @selected="updateLastSelectedMovie"></TVspotterCarousel>
+                    <span v-if="moviesPages > 1">*Displaying only result page 1 of {{ moviesPages }}</span>
                 </div>
-            </form>
-
-            <TVspotterCarousel :searchList="moviesSearched" @selected="updateLastSelectedMovie"></TVspotterCarousel>
-            <br>
-            <span v-if="moviesPages > 0">*Displaying only result page 1 of {{ moviesPages }}</span>
-        </div>
-        <br>
-
-        <md-toolbar class="md-primary">
-            <md-icon :md-src="require('@/assets/eye-regular.svg')"></md-icon>
-            <h3 class="md-title" style="flex: 1;">Watchlist</h3>
-        </md-toolbar>
-        <br>
-
-        <div class="bordered">
-            <p>{{ lastSelectedMovie }}</p>
-            <p>{{ moviesSearched }}</p>
-            <TVspotterWatchlist :itemList="moviesSearched"></TVspotterWatchlist>
-        </div>
-    </div>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <v-toolbar color="primary" light>
+                    <v-btn icon class="non-clickable"><v-icon>far fa-eye</v-icon></v-btn>
+                    <v-toolbar-title>Watchlist</v-toolbar-title>
+                </v-toolbar>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <div class="bordered">
+                    <p>{{ lastSelectedMovie }}</p>
+                    <TVspotterWatchlist :itemList="moviesSearched"></TVspotterWatchlist>
+                </div>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
 import TVspotterCarousel from '@/components/TVspotterCarousel.vue'
 import TVspotterWatchlist from '@/components/TVspotterWatchlist.vue'
 
-import { validationMixin } from 'vuelidate'
-import {
-    required
-} from 'vuelidate/lib/validators'
 import { mapState } from 'vuex'
 
 export default {
     name: 'Movies',
-    mixins: [validationMixin],
     components: {
         TVspotterCarousel,
         TVspotterWatchlist
     },
     data () {
         return {
-            form: {
+            logo: '$vuetify.icons.tmdbLogo',
+            validSearch: false,
+            searchRules: [
+                (v) => !!v || 'Please enter a search term'
+            ],
+            formSearch: {
                 search: null
             },
             sending: false,
             lastSelectedMovie: null
         }
     },
-    validations: {
-        form: {
-            search: {
-                required
-            }
-        }
-    },
     methods: {
-        getValidationClass (fieldName) {
-            const field = this.$v.form[fieldName]
-            if (field) {
-                return {
-                    'md-invalid': field.$invalid && field.$dirty
-                }
-            }
-        },
         send () {
             this.sending = true
-            console.log(this.form.search)
-            this.$store.dispatch('TVSPOTTER/MOVIESSEARCHED/GET_MOVIES_SEARCHED', { search: this.form.search })
+            console.log(this.formSearch.search)
+            this.$store.dispatch('TVSPOTTER/MOVIESSEARCHED/GET_MOVIES_SEARCHED', { search: this.formSearch.search })
                 .then(() => {
                     this.sending = false
                 })
-        },
-        validateSearch () {
-            this.$v.$touch()
-            if (!this.$v.$invalid) {
-                this.send()
-            }
         },
         updateLastSelectedMovie (data) {
             if (data.startsWith('movie')) {
@@ -128,16 +114,12 @@ export default {
     padding-left: 10px;
 }
 
-.md-progress-bar {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
+.non-clickable {
+    pointer-events: none;
 }
 
 .bordered {
     border: 1px solid #ff9800;
-    padding: 10px;
 }
 
 .flex-container {

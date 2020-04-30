@@ -1,6 +1,6 @@
 <template>
     <carousel
-        :per-page="6"
+        :per-page="itemsPerPage"
         :navigation-enabled="true"
         :paginationActiveColor="'#ff9800'"
         navigationNextLabel="<div class='navvy rightnav'>▶︎</div>"
@@ -8,31 +8,24 @@
         class="carousel"
     >
         <slide v-for="(item, index) in searchList" :key="index">
-            <md-card class="slide-card">
-                <md-card-media-cover md-solid>
-                    <md-card-media>
-                        <img v-if="!item.poster.endsWith('.svg')" :src="item.poster" alt="Poster" class="slide-image">
-                        <img v-else :src="require('@/assets/no-poster.png')" alt="Poster missing" class="slide-image">
-                    </md-card-media>
-
-                    <md-card-area>
-                        <md-card-header>
-                            <span class="md-title">{{ item.name }}</span>
-                            <span class="md-subhead">{{ item.firstRelease }}</span>
-                        </md-card-header>
-
-                        <md-card-actions>
-                            <md-button :id="'movie' + item.id" @click="onSelect">Add to watchlist</md-button>
-                        </md-card-actions>
-                    </md-card-area>
-                </md-card-media-cover>
-            </md-card>
+            <v-card max-width="200">
+                <v-img class="primary--text align-end" height="300px" :src="item.poster">
+                    <v-card-title class="text-shadow">{{ item.name }}</v-card-title>
+                </v-img>
+                <v-card-subtitle class="pb-0">{{ item.firstRelease }}</v-card-subtitle>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <TextToIconButton :item="item" @clicked="onSelect"></TextToIconButton>
+                    <v-spacer></v-spacer>
+                </v-card-actions>
+            </v-card>
         </slide>
     </carousel>
 </template>
 
 <script>
 import { Carousel, Slide } from 'vue-carousel'
+import TextToIconButton from '@/components/TextToIconButton.vue'
 
 export default {
     name: 'TVspotterCarousel',
@@ -41,26 +34,78 @@ export default {
     },
     components: {
         Carousel,
-        Slide
+        Slide,
+        TextToIconButton
     },
     methods: {
         onSelect (event) {
             this.$emit('selected', event.currentTarget.id)
+        }
+    },
+    computed: {
+        itemsPerPage () {
+            const curBp = this.$vuetify.breakpoint.name
+            let items = 0
+            switch (curBp) {
+                case 'xl':
+                    items = 6
+                    break
+                case 'lg':
+                    items = 4
+                    break
+                case 'md':
+                    items = 3
+                    break
+                case 'sm':
+                    items = 2
+                    break
+                case 'xs':
+                    items = 1
+                    break
+                default:
+                    items = 1
+                    break
+            }
+            return items
         }
     }
 }
 </script>
 
 <style lang="scss">
-.slide-card {
-    max-width: 200px;
-    max-height: 300px;
-}
-
-.slide-image {
-    max-width: 200px;
-    max-height: 300px;
-    opacity: 0.5;
+.text-shadow {
+    text-shadow: -2px -2px black,
+                -2px -1.5px black,
+                -2px -1px black,
+                -2px -0.5px black,
+                -2px 0px black,
+                -2px 0.5px black,
+                -2px 1px black,
+                -2px 1.5px black,
+                -2px 2px black,
+                -1.5px 2px black,
+                -1px 2px black,
+                -0.5px 2px black,
+                0px 2px black,
+                0.5px 2px black,
+                1px 2px black,
+                1.5px 2px black,
+                2px 2px black,
+                2px 1.5px black,
+                2px 1px black,
+                2px 0.5px black,
+                2px 0px black,
+                2px -0.5px black,
+                2px -1px black,
+                2px -1.5px black,
+                2px -2px black,
+                1.5px -2px black,
+                1px -2px black,
+                0.5px -2px black,
+                0px -2px black,
+                -0.5px -2px black,
+                -1px -2px black,
+                -1.5px -2px black;
 }
 
 .carousel {
