@@ -2,7 +2,8 @@
     <carousel
         :per-page="itemsPerPage"
         :navigation-enabled="true"
-        :paginationActiveColor="'#ff9800'"
+        :paginationActiveColor="$vuetify.theme.themes[theme].primary"
+        :paginationColor="$vuetify.theme.themes[theme].secondary"
         navigationNextLabel="<div class='navvy rightnav'>▶︎</div>"
         navigationPrevLabel="<div class='navvy leftnav'>◀︎</div>"
         class="carousel"
@@ -43,6 +44,9 @@ export default {
         }
     },
     computed: {
+        theme () {
+            return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+        },
         itemsPerPage () {
             const curBp = this.$vuetify.breakpoint.name
             let items = 0
@@ -121,9 +125,9 @@ export default {
     .navvy {
         font-size: 1.75em;
         cursor: pointer;
-        color: white;
+        color: var(--v-primary-base);
         &:hover {
-            color: #ff9800;
+            color: var(--v-primary-lighten1);
         }
         &.leftnav {
             transform: translateY(0%) translateX(130%);

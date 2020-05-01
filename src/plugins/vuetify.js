@@ -3,6 +3,8 @@ import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 import colors from 'vuetify/lib/util/colors'
 
+import HardDrive from '@/custom-icons/HardDrive.vue'
+import UsbDrive from '@/custom-icons/UsbDrive.vue'
 import TmdbLogoSquare from '@/custom-icons/TmdbLogoSquare.vue'
 import TmdbLogo from '@/custom-icons/TmdbLogo.vue'
 
@@ -32,11 +34,20 @@ export default new Vuetify({
                 success: colors.green.base,
                 background: colors.grey.lighten3
             }
+        },
+        options: {
+            customProperties: true
         }
     },
     icons: {
         iconfont: 'fa',
         values: {
+            hardDrive: {
+                component: HardDrive
+            },
+            usbDrive: {
+                component: UsbDrive
+            },
             tmdbLogo: {
                 component: TmdbLogo
             },

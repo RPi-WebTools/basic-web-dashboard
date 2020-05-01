@@ -1,6 +1,6 @@
 <template>
     <v-tooltip left v-model="showFabTooltip" color="accent" :key="this.$vuetify.breakpoint.name">
-        <v-btn fixed fab bottom right color="accent" slot="activator">
+        <v-btn fixed fab bottom right color="accent" slot="activator" @click="onClick">
             <v-icon>fas fa-sync-alt</v-icon>
         </v-btn>
         <span>Data from: {{ latestTimestamp }}</span>
@@ -16,6 +16,11 @@ export default {
     data: () => {
         return {
             showFabTooltip: true
+        }
+    },
+    methods: {
+        onClick (e) {
+            this.$emit('click', e)
         }
     }
 }

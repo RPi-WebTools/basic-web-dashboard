@@ -1,7 +1,7 @@
 import API from '../../api'
 
 const state = {
-    netInfo: {
+    netInfo: [{
         num: 0,
         iface: '',
         ip: '',
@@ -11,7 +11,7 @@ const state = {
         dhcp: '',
         rx: 0,
         tx: 0
-    }
+    }]
 }
 
 const actions = {

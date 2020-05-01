@@ -1,10 +1,10 @@
 <template>
     <div>
-        <p class="headline">Storage capacity</p>
+        <p class="headline pl-3 pt-3">Storage capacity</p>
         <v-container fluid>
             <v-row>
                 <v-col cols="12" lg="6" align-self="center">
-                    <v-simple-table class="elevation-1">
+                    <v-simple-table class="elevation-0">
                         <template v-slot:default>
                             <thead>
                                 <tr>

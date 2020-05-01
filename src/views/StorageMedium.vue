@@ -1,5 +1,5 @@
 <template>
-    <div class="storage-medium">
+    <!-- <div class="storage-medium">
         <h1>Filesystem Details</h1>
         <div class="grid">
             <div class="item icon">
@@ -175,13 +175,26 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
+    <!-- TODO -->
+    <v-card class="px-2 pb-3 pt-1" tile>
+        <p class="headline pl-3 pt-3">Filesystem Details</p>
+        <v-container fluid>
+            <v-row>
+                <v-col cols="12" md="2">
+                    <v-btn icon>
+                        <v-icon v-text="iconHardDrive"></v-icon>
+                    </v-btn>
+                </v-col>
+            </v-row>
+        </v-container>
+    </v-card>
 </template>
 
 <script>
-import DoughnutChart from '@/charts/DoughnutChart.vue'
-import FsReadHist from '@/components/FsReadHist.vue'
-import FsWriteHist from '@/components/FsWriteHist.vue'
+// import DoughnutChart from '@/charts/DoughnutChart.vue'
+// import FsReadHist from '@/components/FsReadHist.vue'
+// import FsWriteHist from '@/components/FsWriteHist.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -190,13 +203,15 @@ export default {
         fsDetails: Object,
         uuid: String
     },
-    components: {
-        DoughnutChart,
-        FsReadHist,
-        FsWriteHist
-    },
+    // components: {
+    //     DoughnutChart,
+    //     FsReadHist,
+    //     FsWriteHist
+    // },
     data () {
         return {
+            iconHardDrive: '$vuetify.icons.hardDrive',
+            iconUsbDrive: '$vuetify.icons.usbDrive',
             doughnutOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -306,6 +321,10 @@ export default {
 </script>
 
 <style scoped>
+.icon {
+    pointer-events: none;
+}
+
 .filter-green {
     filter: brightness(0) saturate(100%) invert(77%) sepia(34%) saturate(744%) hue-rotate(39deg) brightness(89%) contrast(84%);
 }
@@ -318,7 +337,7 @@ export default {
     filter: brightness(0) saturate(100%) invert(72%) sepia(79%) saturate(3637%) hue-rotate(359deg) brightness(101%) contrast(105%);
 }
 
-.vertical-center {
+/* .vertical-center {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
@@ -398,7 +417,7 @@ table {
 
 td {
     padding: 5px;
-}
+} */
 
 .empty-row {
     border-top: 1px solid #fafafa;

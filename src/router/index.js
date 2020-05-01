@@ -38,6 +38,7 @@ const routes = [
                         children: [
                             {
                                 path: ':uuid',
+                                name: 'UUID',
                                 component: () => import('../views/StorageMedium.vue'),
                                 props: true
                             }

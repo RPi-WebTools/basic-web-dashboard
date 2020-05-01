@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="headline">Device Info</p>
+        <p class="headline pl-3 pt-3">Device Info</p>
         <v-row>
             <v-col align-self="center">
                 <v-simple-table dense>

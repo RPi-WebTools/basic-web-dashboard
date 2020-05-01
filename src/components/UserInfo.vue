@@ -1,10 +1,10 @@
 <template>
     <div>
-        <p class="headline">User Info</p>
+        <p class="headline pl-3 pt-3">User Info</p>
         <v-container fluid>
             <v-row>
                 <v-col cols="12" md="6">
-                    <v-data-table :headers="headers" :items="userInfo" :items-per-page="-1" class="elevation-1">
+                    <v-data-table :headers="headers" :items="userInfo" :items-per-page="-1" class="elevation-0">
                     </v-data-table>
                 </v-col>
                 <v-col cols="12" md="6">

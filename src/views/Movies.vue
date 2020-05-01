@@ -88,7 +88,6 @@ export default {
     methods: {
         send () {
             this.sending = true
-            console.log(this.formSearch.search)
             this.$store.dispatch('TVSPOTTER/MOVIESSEARCHED/GET_MOVIES_SEARCHED', { search: this.formSearch.search })
                 .then(() => {
                     this.sending = false
