@@ -1,88 +1,71 @@
 <template>
-    <div class="CpuAndMemory">
-        <div class="md-layout md-alignment-center-space-between">
-            <h1 class="md-layout-item">CPU & Memory</h1>
-            <div class="md-layout-item" style="display: flex; align-items: center;">
-                <span style="flex-grow: 1;"></span>
-                <md-button class="md-icon-button md-primary">
-                    <md-icon :md-src="require('../assets/sync-solid.svg')"></md-icon>
-                    <md-tooltip md-direction="bottom">Request new data</md-tooltip>
-                </md-button>
-                <md-chip class="md-primary">Data from: {{ latestTimestamp }}</md-chip>
-            </div>
-        </div>
+    <v-container fluid class="py-0">
+        <v-row>
+            <v-col cols="12">
+                <v-toolbar color="primary" light>
+                    <v-btn icon class="non-clickable"><v-icon>fas fa-microchip</v-icon></v-btn>
+                    <v-toolbar-title>CPU statistics</v-toolbar-title>
+                </v-toolbar>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12" md="6">
+                <v-card class="px-2 pb-3 pt-1" height="100%" tile>
+                    <CurCpuUsage />
+                </v-card>
+            </v-col>
+            <v-col cols="12" md="6">
+                <v-card class="px-2 pb-3 pt-1" tile>
+                    <CpuUsageHist />
+                </v-card>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <v-toolbar color="primary" light>
+                    <v-btn icon class="non-clickable"><v-icon>fas fa-memory</v-icon></v-btn>
+                    <v-toolbar-title>Memory statistics</v-toolbar-title>
+                </v-toolbar>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12" md="6">
+                <v-card class="px-2 pb-3 pt-1" height="100%" tile>
+                    <CurMemUsage />
+                </v-card>
+            </v-col>
+            <v-col cols="12" md="6">
+                <v-card class="px-2 pb-3 pt-1" tile>
+                    <MemUsageHist />
+                </v-card>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <v-toolbar color="primary" light>
+                    <v-btn icon class="non-clickable"><v-icon>fas fa-thermometer-three-quarters</v-icon></v-btn>
+                    <v-toolbar-title>Temperature statistics</v-toolbar-title>
+                </v-toolbar>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12" md="6">
+                <v-card class="px-2 pb-3 pt-1" tile>
+                    <CurTempHist />
+                </v-card>
+            </v-col>
+            <v-col cols="12" md="6">
+                <v-card class="px-2 pb-3 pt-1" tile>
+                </v-card>
+            </v-col>
+        </v-row>
 
-        <md-toolbar class="md-primary">
-            <md-icon :md-src="require('@/assets/microchip-solid.svg')"></md-icon>
-            <h3 class="md-title" style="flex: 1;">CPU statistics</h3>
-        </md-toolbar>
-        <br>
-        <div class="md-layout md-gutter md-alignment-center">
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-                        <CurCpuUsage/>
-                    </md-card-content>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-                        <CpuUsageHist/>
-                    </md-card-content>
-                </md-card>
-            </div>
-        </div>
-
-        <br>
-        <md-toolbar class="md-primary">
-            <md-icon :md-src="require('@/assets/memory-solid.svg')"></md-icon>
-            <h3 class="md-title" style="flex: 1;">Memory statistics</h3>
-        </md-toolbar>
-        <br>
-        <div class="md-layout md-gutter md-alignment-center">
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-                        <CurMemUsage/>
-                    </md-card-content>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-                        <MemUsageHist/>
-                    </md-card-content>
-                </md-card>
-            </div>
-        </div>
-
-        <br>
-        <md-toolbar class="md-primary">
-            <md-icon :md-src="require('@/assets/thermometer-three-quarters-solid.svg')"></md-icon>
-            <h3 class="md-title" style="flex: 1;">Temperature statistics</h3>
-        </md-toolbar>
-        <br>
-        <div class="md-layout md-gutter md-alignment-center">
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-                        <CurTempHist/>
-                    </md-card-content>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-                    </md-card-content>
-                </md-card>
-            </div>
-        </div>
-
-    </div>
+        <FabDataRefresh :latestTimestamp="latestTimestamp" />
+    </v-container>
 </template>
 
 <script>
+import FabDataRefresh from '@/components/FabDataRefresh.vue'
 import CurCpuUsage from '@/components/CurCpuUsage.vue'
 import CpuUsageHist from '@/components/CpuUsageHist.vue'
 import CurMemUsage from '@/components/CurMemUsage.vue'
@@ -96,7 +79,8 @@ export default {
         CpuUsageHist,
         CurMemUsage,
         MemUsageHist,
-        CurTempHist
+        CurTempHist,
+        FabDataRefresh
     },
     data () {
         return {
@@ -105,3 +89,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.non-clickable {
+    pointer-events: none;
+}
+</style>

@@ -82,12 +82,12 @@ export default {
                 datasets: [
                     {
                         backgroundColor: [
-                            this.$vuetify.theme.themes[this.theme].success, // used
-                            this.$vuetify.theme.themes[this.theme].secondary // free
+                            this.$vuetify.theme.themes[this.theme].secondary, // used
+                            this.$vuetify.theme.themes[this.theme].success // free
                         ],
                         data: [
-                            (usedSpace / totalSpace) * 100,
-                            100 - (usedSpace / totalSpace) * 100
+                            +((usedSpace / totalSpace) * 100).toFixed(2),
+                            +(100 - (usedSpace / totalSpace) * 100).toFixed(2)
                         ],
                         borderColor: this.chartFontColour
                     }
@@ -108,6 +108,19 @@ export default {
                     },
                     position: 'bottom',
                     align: 'middle'
+                },
+                tooltips: {
+                    callbacks: {
+                        label (tooltipItem, data) {
+                            const dataset = data.datasets[tooltipItem.datasetIndex]
+                            const meta = dataset._meta[Object.keys(dataset._meta)[0]]
+                            const percentage = +(dataset.data[tooltipItem.index] / meta.total * 100).toFixed(2)
+                            return percentage + ' %'
+                        },
+                        title (tooltipItem, data) {
+                            return data.labels[tooltipItem[0].index]
+                        }
+                    }
                 }
             }
         },

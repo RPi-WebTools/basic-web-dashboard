@@ -1,12 +1,4 @@
 <template>
-    <!-- <div class="Filesystem">
-        <br>
-        <div v-show="showFsDetails" style="border: 1px solid #ff9800; padding: 10px;">
-            <transition name="slide">
-                <router-view :key="$route.path" :fsDetails="selectedFsDetails" @created="childCreated" />
-            </transition>
-        </div>
-    </div> -->
     <v-container fluid class="py-0">
         <v-row>
             <v-col cols="12">
@@ -17,7 +9,7 @@
         </v-row>
         <v-row>
             <v-col cols="12">
-                <router-view :key="$route.path" :fsDetails="selectedFsDetails" />
+                <router-view :key="$route.path" :fsDetails="selectedFsDetails" @created="childCreated" />
             </v-col>
         </v-row>
 
@@ -46,7 +38,6 @@ export default {
     methods: {
         updateSelected (data) {
             this.selectedFsDetails = data
-            console.log(this.$route)
             if (data == null || Object.keys(data).length === 0) {
                 this.showFsDetails = false
                 if (this.$route.name !== 'Storage') this.$router.push({ name: 'Storage' })
@@ -54,7 +45,6 @@ export default {
                 this.showFsDetails = true
                 if (this.$route.name !== 'UUID' || this.$route.path !== ('/dashboard/storage/' + data.uuid)) this.$router.push('/dashboard/storage/' + data.uuid)
             }
-            console.log(this.$route)
         },
         childCreated (data) {
             this.childUuid = data

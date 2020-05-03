@@ -15,7 +15,6 @@
                     :key="subIndex"
                     :to="{ name: sub.to }"
                     router
-                    exact
                     color="primary"
                 >
                     <v-list-item-icon>

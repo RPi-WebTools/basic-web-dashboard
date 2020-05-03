@@ -142,6 +142,8 @@ export default {
                                     return (value / 1000000) + ' MB'
                                 } else if (value > 1000) {
                                     return (value / 1000) + ' kB'
+                                } else if (value > -1) {
+                                    return value + ' B'
                                 }
                             }
                         },

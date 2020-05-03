@@ -1,17 +1,19 @@
 <template>
     <div>
-        <h2>CPU temperature history in °C</h2>
-        <div class="chartContainer">
-            <div class="md-layout md-alignment-center-space-between">
-                <div class="md-layout-item md-size-30">
-                    <md-card>
-                        <md-card-header style="font-size: 20px;">CPU temperature:</md-card-header>
-                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ cpuInfo.curCpuTemp }} °C</md-card-content>
-                    </md-card>
-                </div>
-                <line-chart class="md-layout-item" :chartData="dataset" :options="lineOptions" :styles="styles"></line-chart>
-            </div>
-        </div>
+        <p class="headline pl-3 pt-3">CPU temperature history</p>
+        <v-container fluid>
+            <v-row>
+                <v-col cols="12" md="4" align-self="center">
+                    <v-card outlined>
+                        <v-card-title class="primary--text">Latest temperature:</v-card-title>
+                        <v-card-subtitle class="headline">{{ cpuInfo.curCpuTemp }} °C</v-card-subtitle>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" md="8">
+                    <LineChart :chartData="dataset" :options="lineOptions" :styles="styles"></LineChart>
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 </template>
 
@@ -26,7 +28,37 @@ export default {
     },
     data () {
         return {
-            lineOptions: {
+            styles: {
+                height: '300px'
+            }
+        }
+    },
+    mounted () {
+        this.$store.dispatch('SYSMON/CPUINFO/GET_CPU_INFO')
+        this.$store.dispatch('SYSMON/CPUHIST/GET_CPU_HIST')
+    },
+    computed: {
+        theme () {
+            return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+        },
+        chartFontColour () {
+            return (this.$vuetify.theme.dark) ? '#ffffff' : '#616161'
+        },
+        dataset () {
+            return {
+                labels: this.cpuHist.timestamps,
+                datasets: [
+                    {
+                        fill: false,
+                        backgroundColor: this.$vuetify.theme.themes[this.theme].primary,
+                        borderColor: this.$vuetify.theme.themes[this.theme].primary,
+                        data: this.cpuHist.temperature
+                    }
+                ]
+            }
+        },
+        lineOptions () {
+            return {
                 responsive: true,
                 maintainAspectRatio: false,
                 title: {
@@ -38,44 +70,37 @@ export default {
                 scales: {
                     xAxes: [{
                         ticks: {
-                            fontColor: '#fafafa'
+                            fontColor: this.chartFontColour,
+                            maxTicksLimit: 20
                         },
                         gridLines: {
-                            color: '#fafafa'
+                            color: this.chartFontColour
+                        },
+                        type: 'time',
+                        time: {
+                            unit: 'minute',
+                            displayFormats: {
+                                minute: 'MMM DD HH:mm'
+                            },
+                            parser: 'x'
                         }
                     }],
                     yAxes: [{
                         ticks: {
-                            fontColor: '#fafafa'
+                            fontColor: this.chartFontColour,
+                            callback: (value, index, values) => {
+                                return value + ' °C'
+                            }
                         },
                         gridLines: {
-                            color: '#fafafa',
+                            color: this.chartFontColour,
                             borderDash: [4, 15]
                         }
                     }]
+                },
+                animation: {
+                    duration: 0
                 }
-            },
-            styles: {
-                height: '300px'
-            }
-        }
-    },
-    mounted () {
-        this.$store.dispatch('SYSMON/CPUINFO/GET_CPU_INFO')
-        this.$store.dispatch('SYSMON/CPUHIST/GET_CPU_HIST')
-    },
-    computed: {
-        dataset () {
-            return {
-                labels: this.cpuHist.timestamps,
-                datasets: [
-                    {
-                        fill: false,
-                        backgroundColor: '#ff9800',
-                        borderColor: '#ff9800',
-                        data: this.cpuHist.temperature
-                    }
-                ]
             }
         },
         ...mapState('SYSMON/CPUINFO', ['cpuInfo']),
@@ -85,8 +110,4 @@ export default {
 </script>
 
 <style scoped>
-/*.chartContainer {
-    max-width: 650px;
-    position: relative;
-}*/
 </style>

@@ -6,8 +6,8 @@ const state = {
         used: [],
         buffered: [],
         cached: [],
-        free: [],
-        swap: []
+        swap: [],
+        swapTotal: 1
     }
 }
 
@@ -20,14 +20,8 @@ const actions = {
             data.used = result.data.used
             data.buffered = result.data.buffered
             data.cached = result.data.cached
-            data.free = []
             data.swap = result.data.swap
-
-            let curUsage = 0
-            for (const [i, val] of data.used.entries()) {
-                curUsage = val + data.buffered[i] + data.cached[i]
-                data.free.push(100 - curUsage)
-            }
+            data.swapTotal = result.data.swapTotal
 
             commit('SET_MEM_HIST', data)
         }, (err) => {
