@@ -1,9 +1,5 @@
 <template>
-    <div>
-        <div class="chartContainer">
-            <line-chart class="md-layout-item" :chartData="dataset" :options="lineOptions" :styles="styles"></line-chart>
-        </div>
-    </div>
+    <line-chart :chartData="dataset" :options="lineOptions" :styles="styles"></line-chart>
 </template>
 
 <script>
@@ -20,7 +16,37 @@ export default {
     },
     data () {
         return {
-            lineOptions: {
+            styles: {
+                height: '240px'
+            }
+        }
+    },
+    mounted () {
+        this.$store.dispatch('SYSMON/FSHIST/GET_FS_HIST')
+    },
+    computed: {
+        theme () {
+            return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+        },
+        chartFontColour () {
+            return (this.$vuetify.theme.dark) ? '#ffffff' : '#616161'
+        },
+        dataset () {
+            const item = this.fsHistByUuid(this.$props.uuid)[0]
+            return {
+                labels: item.timestamps,
+                datasets: [
+                    {
+                        fill: false,
+                        backgroundColor: this.$vuetify.theme.themes[this.theme].success,
+                        borderColor: this.$vuetify.theme.themes[this.theme].success,
+                        data: item.rx
+                    }
+                ]
+            }
+        },
+        lineOptions () {
+            return {
                 responsive: true,
                 maintainAspectRatio: false,
                 title: {
@@ -32,44 +58,42 @@ export default {
                 scales: {
                     xAxes: [{
                         ticks: {
-                            fontColor: '#fafafa'
+                            fontColor: this.chartFontColour
                         },
                         gridLines: {
-                            color: '#fafafa'
+                            color: this.chartFontColour
+                        },
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                hour: 'MMM DD HH:mm'
+                            },
+                            parser: 'x'
                         }
                     }],
                     yAxes: [{
                         ticks: {
-                            fontColor: '#fafafa'
+                            beginAtZero: true,
+                            fontColor: this.chartFontColour,
+                            callback: (value, index, values) => {
+                                if (value > 1000000000) {
+                                    return (value / 1000000000) + ' GB'
+                                } else if (value > 1000000) {
+                                    return (value / 1000000) + ' MB'
+                                } else if (value > 1000) {
+                                    return (value / 1000) + ' kB'
+                                } else if (value > -1) {
+                                    return value + ' B'
+                                }
+                            }
                         },
                         gridLines: {
-                            color: '#fafafa',
+                            color: this.chartFontColour,
                             borderDash: [4, 15]
                         }
                     }]
                 }
-            },
-            styles: {
-                height: '202px'
-            }
-        }
-    },
-    mounted () {
-        this.$store.dispatch('SYSMON/FSHIST/GET_FS_HIST')
-    },
-    computed: {
-        dataset () {
-            const item = this.fsHistByUuid(this.$props.uuid)[0]
-            return {
-                labels: item.timestamps,
-                datasets: [
-                    {
-                        fill: false,
-                        backgroundColor: '#29B6F6',
-                        borderColor: '#29B6F6',
-                        data: item.rx
-                    }
-                ]
             }
         },
         ...mapGetters('SYSMON/FSHIST', ['fsHistByUuid'])
@@ -78,8 +102,4 @@ export default {
 </script>
 
 <style scoped>
-/*.chartContainer {
-    max-width: 650px;
-    position: relative;
-}*/
 </style>

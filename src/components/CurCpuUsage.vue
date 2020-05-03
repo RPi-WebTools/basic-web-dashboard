@@ -1,17 +1,19 @@
 <template>
     <div>
-        <h2>Latest CPU usage in %</h2>
-        <div class="chartContainer">
-            <div class="md-layout md-alignment-center">
-                <div class="md-layout-item md-size-30">
-                    <md-card>
-                        <md-card-header style="font-size: 20px;">CPU load:</md-card-header>
-                        <md-card-content style="font-size: 20px;font-weight: bold;">{{ cpuInfo.curCpuLoad }} %</md-card-content>
-                    </md-card>
-                </div>
-                <doughnut-chart class="md-layout-item" :chartData="dataset" :options="doughnutOptions" :styles="styles"></doughnut-chart>
-            </div>
-        </div>
+        <p class="headline pl-3 pt-3">Latest CPU usage</p>
+        <v-container fluid>
+            <v-row>
+                <v-col cols="12" md="4" align-self="center">
+                    <v-card outlined>
+                        <v-card-title class="primary--text">CPU load:</v-card-title>
+                        <v-card-subtitle class="headline">{{ +cpuInfo.curCpuLoad.toFixed(2) }} %</v-card-subtitle>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" md="8">
+                    <DoughnutChart :chartData="dataset" :options="doughnutOptions" :styles="styles"></DoughnutChart>
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 </template>
 
@@ -26,7 +28,38 @@ export default {
     },
     data () {
         return {
-            doughnutOptions: {
+            styles: {
+                height: '250px'
+            }
+        }
+    },
+    created () {
+        this.$store.dispatch('SYSMON/CPUINFO/GET_CPU_INFO')
+    },
+    computed: {
+        theme () {
+            return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+        },
+        chartFontColour () {
+            return (this.$vuetify.theme.dark) ? '#ffffff' : '#616161'
+        },
+        dataset () {
+            return {
+                labels: ['Used', 'Unused'],
+                datasets: [
+                    {
+                        backgroundColor: [
+                            this.$vuetify.theme.themes[this.theme].secondary, // used
+                            this.$vuetify.theme.themes[this.theme].success // free
+                        ],
+                        data: [this.cpuInfo.curCpuLoad, 100 - this.cpuInfo.curCpuLoad],
+                        borderColor: this.chartFontColour
+                    }
+                ]
+            }
+        },
+        doughnutOptions () {
+            return {
                 responsive: true,
                 maintainAspectRatio: false,
                 aspectRatio: 1,
@@ -35,33 +68,27 @@ export default {
                 },
                 legend: {
                     labels: {
-                        fontColor: '#fafafa'
+                        fontColor: this.chartFontColour
                     },
                     position: 'right',
                     align: 'middle'
-                }
-            },
-            styles: {
-                height: '300px'
-            }
-        }
-    },
-    created () {
-        this.$store.dispatch('SYSMON/CPUINFO/GET_CPU_INFO')
-    },
-    computed: {
-        dataset () {
-            return {
-                labels: ['Used', 'Unused'],
-                datasets: [
-                    {
-                        backgroundColor: [
-                            '#8BC34A', // used
-                            '#607D8B' // free
-                        ],
-                        data: [this.cpuInfo.curCpuLoad, 100 - this.cpuInfo.curCpuLoad]
+                },
+                tooltips: {
+                    callbacks: {
+                        label (tooltipItem, data) {
+                            const dataset = data.datasets[tooltipItem.datasetIndex]
+                            const meta = dataset._meta[Object.keys(dataset._meta)[0]]
+                            const percentage = +(dataset.data[tooltipItem.index] / meta.total * 100).toFixed(2)
+                            return percentage + ' %'
+                        },
+                        title (tooltipItem, data) {
+                            return data.labels[tooltipItem[0].index]
+                        }
                     }
-                ]
+                },
+                animation: {
+                    duration: 0
+                }
             }
         },
         ...mapState('SYSMON/CPUINFO', ['cpuInfo'])
@@ -70,8 +97,4 @@ export default {
 </script>
 
 <style scoped>
-.chartContainer {
-    max-width: 650px;
-    position: relative;
-}
 </style>

@@ -1,22 +1,14 @@
 <template>
     <div>
-        <md-table :value="netInfo" md-sort="num" md-sort-order="asc">
-            <md-table-toolbar>
-                <h2 class="md-title">Network Info</h2>
-            </md-table-toolbar>
-
-            <md-table-row slot="md-table-row" slot-scope="{ item }">
-                <md-table-cell md-label="No" md-sort-by="num" md-numeric>{{ item.num }}</md-table-cell>
-                <md-table-cell md-label="Interface" md-sort-by="iface">{{ item.iface }}</md-table-cell>
-                <md-table-cell md-label="IP" md-sort-by="ip">{{ item.ip }}</md-table-cell>
-                <md-table-cell md-label="MAC" md-sort-by="mac">{{ item.mac }}</md-table-cell>
-                <md-table-cell md-label="Type" md-sort-by="type">{{ item.type }}</md-table-cell>
-                <md-table-cell md-label="Speed" md-sort-by="speed">{{ item.speed }} Mbit</md-table-cell>
-                <md-table-cell md-label="DHCP" md-sort-by="dhcp">{{ item.dhcp }}</md-table-cell>
-                <md-table-cell md-label="Bytes received" md-sort-by="rx">{{ item.rx }}</md-table-cell>
-                <md-table-cell md-label="Bytes sent" md-sort-by="tx">{{ item.tx }}</md-table-cell>
-            </md-table-row>
-        </md-table>
+        <p class="headline pl-3 pt-3">Network Info</p>
+        <v-container fluid>
+            <v-row>
+                <v-col cols="12">
+                    <v-data-table :headers="headers" :items="netInfo" :items-per-page="-1" class="elevation-0">
+                    </v-data-table>
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 </template>
 
@@ -25,6 +17,21 @@ import { mapState } from 'vuex'
 
 export default {
     name: 'NetworkInfo',
+    data () {
+        return {
+            headers: [
+                { text: 'No.', value: 'num' },
+                { text: 'Interface', value: 'iface' },
+                { text: 'IP', value: 'ip' },
+                { text: 'MAC', value: 'mac' },
+                { text: 'Type', value: 'type' },
+                { text: 'Speed', value: 'speed' },
+                { text: 'DHCP', value: 'dhcp' },
+                { text: 'Bytes received', value: 'rx' },
+                { text: 'Bytes sent', value: 'tx' }
+            ]
+        }
+    },
     mounted () {
         this.$store.dispatch('SYSMON/NETINFO/GET_NET_INFO')
     },

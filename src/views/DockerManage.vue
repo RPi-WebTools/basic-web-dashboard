@@ -1,22 +1,19 @@
 <template>
-    <div class="dockerManage">
-        <div class="md-layout md-alignment-center-space-between">
-            <h1 class="md-layout-item">Manage Docker</h1>
-            <div class="md-layout-item" style="display: flex; align-items: center;">
-                <span style="flex-grow: 1;"></span>
-                <md-button class="md-icon-button md-primary">
-                    <md-icon :md-src="require('../assets/sync-solid.svg')"></md-icon>
-                    <md-tooltip md-direction="bottom">Request new data</md-tooltip>
-                </md-button>
-                <md-chip class="md-primary">Data from: {{ latestTimestamp }}</md-chip>
-            </div>
-        </div>
-    </div>
+    <v-container fluid class="py-0">
+        <v-row>
+        </v-row>
+        <FabDataRefresh :latestTimestamp="latestTimestamp" />
+    </v-container>
 </template>
 
 <script>
+import FabDataRefresh from '@/components/FabDataRefresh.vue'
+
 export default {
     name: 'DockerManage',
+    components: {
+        FabDataRefresh
+    },
     data () {
         return {
             latestTimestamp: '07.03.20 13:00'

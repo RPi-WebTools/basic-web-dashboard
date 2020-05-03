@@ -1,42 +1,30 @@
 <template>
-    <div class="Filesystem">
-        <div class="md-layout md-alignment-center-space-between">
-            <h1 class="md-layout-item">Storage</h1>
-            <div class="md-layout-item" style="display: flex; align-items: center;">
-                <span style="flex-grow: 1;"></span>
-                <md-button class="md-icon-button md-primary">
-                    <md-icon :md-src="require('../assets/sync-solid.svg')"></md-icon>
-                    <md-tooltip md-direction="bottom">Request new data</md-tooltip>
-                </md-button>
-                <md-chip class="md-primary">Data from: {{ latestTimestamp }}</md-chip>
-            </div>
-        </div>
-
-        <div class="md-layout md-gutter md-alignment-center">
-            <div class="md-layout-item">
-                <md-card>
-                    <md-card-content>
-                        <FsInfo @selected="updateSelected" />
-                    </md-card-content>
-                </md-card>
-            </div>
-        </div>
-
-        <br>
-        <div v-show="showFsDetails" style="border: 1px solid #ff9800; padding: 10px;">
-            <transition name="slide">
+    <v-container fluid class="py-0">
+        <v-row>
+            <v-col cols="12">
+                <v-card class="px-2 pb-3 pt-1" tile>
+                    <FsInfo @selected="updateSelected" />
+                </v-card>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
                 <router-view :key="$route.path" :fsDetails="selectedFsDetails" @created="childCreated" />
-            </transition>
-        </div>
-    </div>
+            </v-col>
+        </v-row>
+
+        <FabDataRefresh :latestTimestamp="latestTimestamp" />
+    </v-container>
 </template>
 
 <script>
+import FabDataRefresh from '@/components/FabDataRefresh.vue'
 import FsInfo from '@/components/FsInfo.vue'
 
 export default {
     name: 'Filesystem',
     components: {
+        FabDataRefresh,
         FsInfo
     },
     data () {
@@ -52,10 +40,10 @@ export default {
             this.selectedFsDetails = data
             if (data == null || Object.keys(data).length === 0) {
                 this.showFsDetails = false
-                if (this.$route.path !== '/storage') this.$router.push('/storage')
+                if (this.$route.name !== 'Storage') this.$router.push({ name: 'Storage' })
             } else {
                 this.showFsDetails = true
-                if (this.$route.path !== ('/storage/' + data.uuid)) this.$router.push('/storage/' + data.uuid)
+                if (this.$route.name !== 'UUID' || this.$route.path !== ('/dashboard/storage/' + data.uuid)) this.$router.push('/dashboard/storage/' + data.uuid)
             }
         },
         childCreated (data) {

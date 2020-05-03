@@ -23,7 +23,7 @@ const routes = [
                 children: [
                     {
                         path: 'cpumem',
-                        name: 'CpuAndMemory',
+                        name: 'CPU & Memory',
                         component: () => import('../views/CpuAndMemory.vue')
                     },
                     {
@@ -33,11 +33,12 @@ const routes = [
                     },
                     {
                         path: 'storage',
-                        name: 'Filesystem',
+                        name: 'Storage',
                         component: () => import('../views/Filesystem.vue'),
                         children: [
                             {
                                 path: ':uuid',
+                                name: 'UUID',
                                 component: () => import('../views/StorageMedium.vue'),
                                 props: true
                             }
@@ -53,12 +54,12 @@ const routes = [
                 children: [
                     {
                         path: 'manage',
-                        name: 'DockerManage',
+                        name: 'Manage Docker',
                         component: () => import('../views/DockerManage.vue')
                     },
                     {
                         path: 'baikal',
-                        name: 'Baikal',
+                        name: 'Baïkal',
                         component: () => import('../views/Baikal.vue')
                     }
                 ]
@@ -71,19 +72,19 @@ const routes = [
                 children: [
                     {
                         path: 'statistics',
-                        name: 'GiteaStatistics',
+                        name: 'Gitea Statistics',
                         component: () => import('../views/GiteaStatistics.vue')
                     },
                     {
                         path: 'configuration',
-                        name: 'GiteaConfig',
+                        name: 'Gitea Config',
                         component: () => import('../views/GiteaConfig.vue')
                     }
                 ]
             },
             {
                 path: 'sysserv',
-                name: 'SysServ',
+                name: 'System Services',
                 component: () => import('../views/SystemServices.vue')
             },
             {

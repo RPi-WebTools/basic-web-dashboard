@@ -1,30 +1,49 @@
 <template>
     <div>
-        <md-table :value="fsInfo" md-sort="num" md-sort-order="asc" @md-selected="onSelect">
-            <md-table-toolbar>
-                <h2 class="md-title">Filesystem Info</h2>
-            </md-table-toolbar>
-            <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single">
-                <md-table-cell md-label="No" md-sort-by="num" md-numeric>{{ item.num }}</md-table-cell>
-                <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
-                <md-table-cell md-label="Label" md-sort-by="label">{{ item.label }}</md-table-cell>
-                <md-table-cell md-label="FS Type" md-sort-by="fsType">{{ item.fsType }}</md-table-cell>
-                <md-table-cell md-label="Mounted at" md-sort-by="mount">{{ item.mount }}</md-table-cell>
-                <md-table-cell md-label="Usage" md-sort-by="usedPercentage">
-                    <table>
-                        <tr>
-                            <td style="width: 30px; border: 0;">
-                                <md-icon :md-src="require('../assets/hdd-regular.svg')"></md-icon>
-                            </td>
-                            <td style="border: 0; padding-left: 5px;">
-                                <md-progress-bar md-mode="determinate" :md-value="item.usedPercentage" style="height: 10px;"></md-progress-bar>
-                            </td>
-                        </tr>
-                    </table>
-                </md-table-cell>
-                <md-table-cell md-label="UUID" md-sort-by="uuid">{{ item.uuid }}</md-table-cell>
-            </md-table-row>
-        </md-table>
+        <p class="headline pl-3 pt-3">Filesystem Info</p>
+        <v-container fluid>
+            <v-row>
+                <v-col cols="12">
+                    <v-data-table :headers="headers" :items="fsInfo" :items-per-page="-1" class="elevation-0" single-select>
+                        <template v-slot:body="{ items }">
+                            <tbody>
+                                <tr
+                                    v-for="(item, index) in items"
+                                    :key="index"
+                                    @click="onSelect(item)"
+                                    :class="{ 'selectedRow': item === selectedItem }"
+                                    style="cursor: pointer;"
+                                >
+                                    <td>{{ item.num }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.label }}</td>
+                                    <td>{{ item.fsType }}</td>
+                                    <td>{{ item.mount }}</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td style="width: 30px; border: 0;">
+                                                    <v-icon>fas fa-hdd</v-icon>
+                                                </td>
+                                                <td style="border: 0; padding-left: 5px;">
+                                                    <v-tooltip bottom color="primary">
+                                                        <template v-slot:activator="{ on }">
+                                                            <v-progress-linear :value="item.usedPercentage" height="10" v-on="on"></v-progress-linear>
+                                                        </template>
+                                                        <span>{{ (+item.usedPercentage.toFixed(2) + ' % used') }}</span>
+                                                    </v-tooltip>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>{{ item.uuid }}</td>
+                                </tr>
+                            </tbody>
+                        </template>
+                    </v-data-table>
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 </template>
 
@@ -33,9 +52,29 @@ import { mapState } from 'vuex'
 
 export default {
     name: 'FsInfo',
+    data () {
+        return {
+            headers: [
+                { text: 'No.', value: 'num' },
+                { text: 'Name', value: 'name' },
+                { text: 'Label', value: 'label' },
+                { text: 'FS Type', value: 'fsType' },
+                { text: 'Mounted at', value: 'mount' },
+                { text: 'Usage', value: 'usedPercentage' },
+                { text: 'UUID', value: 'uuid' }
+            ],
+            selectedItem: null
+        }
+    },
     methods: {
         onSelect (item) {
-            this.$emit('selected', item)
+            if (this.selectedItem === item) {
+                this.selectedItem = null
+                this.$emit('selected', null)
+            } else {
+                this.selectedItem = item
+                this.$emit('selected', item)
+            }
         }
     },
     mounted () {
@@ -49,8 +88,7 @@ export default {
 </script>
 
 <style scoped>
-td {
-    text-align: left;
-    vertical-align: middle;
+.selectedRow {
+    background-color: var(--v-background-base);
 }
 </style>
