@@ -9,17 +9,27 @@
         class="carousel"
     >
         <slide v-for="(item, index) in searchList" :key="index">
-            <v-card max-width="200">
-                <v-img class="primary--text align-end" height="300px" :src="item.poster">
-                    <v-card-title class="text-shadow">{{ item.name }}</v-card-title>
-                </v-img>
-                <v-card-subtitle class="pb-0">{{ item.firstRelease }}</v-card-subtitle>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <TextToIconButton :item="item" @clicked="onSelect"></TextToIconButton>
-                    <v-spacer></v-spacer>
-                </v-card-actions>
-            </v-card>
+            <v-hover v-slot:default="{ hover }">
+                <v-card max-width="200">
+                    <v-img height="300px" :src="item.poster">
+                        <v-expand-transition>
+                            <div
+                                v-if="hover"
+                                class="d-flex transition-fast-in-fast-out primary v-card--reveal black--text text-center"
+                                style="height: 100%;"
+                            >
+                                {{ item.name }}
+                            </div>
+                        </v-expand-transition>
+                    </v-img>
+                    <v-card-subtitle class="pb-0">{{ item.firstRelease }}</v-card-subtitle>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <TextToIconButton :item="item" :watchlist="watchlist" @clicked="onSelect"></TextToIconButton>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-hover>
         </slide>
     </carousel>
 </template>
@@ -31,7 +41,8 @@ import TextToIconButton from '@/components/TextToIconButton.vue'
 export default {
     name: 'TVspotterCarousel',
     props: {
-        searchList: Array
+        searchList: Array,
+        watchlist: Array
     },
     components: {
         Carousel,
@@ -77,6 +88,15 @@ export default {
 </script>
 
 <style lang="scss">
+.v-card--reveal {
+    align-items: center;
+    bottom: 0;
+    justify-content: center;
+    opacity: .75;
+    position: absolute;
+    width: 100%;
+}
+
 .text-shadow {
     text-shadow: -2px -2px black,
                 -2px -1.5px black,

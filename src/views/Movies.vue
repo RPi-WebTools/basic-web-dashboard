@@ -35,7 +35,12 @@
                         </div>
                     </v-form>
 
-                    <TVspotterCarousel class="pt-2" :searchList="moviesSearched" @selected="updateLastSelectedMovie"></TVspotterCarousel>
+                    <TVspotterCarousel
+                        class="pt-2"
+                        :searchList="moviesSearched"
+                        :watchlist="moviesWatched"
+                        @selected="addMovieToWatchlist"
+                    ></TVspotterCarousel>
                     <span v-if="moviesPages > 1">*Displaying only result page 1 of {{ moviesPages }}</span>
                 </div>
             </v-col>
@@ -44,15 +49,20 @@
             <v-col cols="12">
                 <v-toolbar color="primary" light>
                     <v-btn icon class="non-clickable"><v-icon>far fa-eye</v-icon></v-btn>
-                    <v-toolbar-title>Watchlist</v-toolbar-title>
+                    <v-toolbar-title>Watchlist ({{ moviesWatched.length }} Items)</v-toolbar-title>
                 </v-toolbar>
             </v-col>
         </v-row>
         <v-row>
             <v-col cols="12">
                 <div class="bordered">
-                    <p>{{ lastSelectedMovie }}</p>
-                    <TVspotterWatchlist :itemList="moviesSearched"></TVspotterWatchlist>
+                    <TVspotterWatchlist
+                        mode="movie"
+                        :itemList="moviesWatched"
+                        :sending="watchlistChecking"
+                        :sendingId="watchlistCheckingTmdbId"
+                        @checkClicked="checkMovieAgain"
+                    ></TVspotterWatchlist>
                 </div>
             </v-col>
         </v-row>
@@ -82,10 +92,14 @@ export default {
                 search: null
             },
             sending: false,
-            lastSelectedMovie: null
+            watchlistChecking: false,
+            watchlistCheckingTmdbId: -1
         }
     },
     methods: {
+        sleep (ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+        },
         send () {
             this.sending = true
             this.$store.dispatch('TVSPOTTER/MOVIESSEARCHED/GET_MOVIES_SEARCHED', { search: this.formSearch.search })
@@ -93,15 +107,48 @@ export default {
                     this.sending = false
                 })
         },
-        updateLastSelectedMovie (data) {
-            if (data.startsWith('movie')) {
-                this.lastSelectedMovie = data.split('movie')[1]
-                // TODO: trigger checkMovie?
+        addMovieToWatchlist (data) {
+            if (data.startsWith('tmdb')) {
+                const tmdbId = data.split('tmdb')[1]
+                this.$store.dispatch(
+                    'TVSPOTTER/MOVIESCHECKRESULT/GET_MOVIES_CHECK_RESULT',
+                    {
+                        tmdb_id: parseInt(tmdbId),
+                        days_range: 10 // TODO: make range editable by user
+                    }
+                ).then(() => {
+                    this.sleep(1000).then(() => { this.$store.dispatch('TVSPOTTER/MOVIESWATCHED/GET_MOVIES_WATCHED') })
+                })
+            }
+        },
+        checkMovieAgain (data) {
+            if (data.startsWith('check')) {
+                const tmdbId = data.split('check')[1]
+                this.watchlistChecking = true
+                this.watchlistCheckingTmdbId = parseInt(tmdbId)
+                this.$store.dispatch(
+                    'TVSPOTTER/MOVIESCHECKRESULT/GET_MOVIES_CHECK_RESULT',
+                    {
+                        tmdb_id: parseInt(tmdbId),
+                        days_range: 10 // TODO: make range editable by user
+                    }
+                ).then(() => {
+                    this.sleep(1000).then(() => {
+                        this.$store.dispatch('TVSPOTTER/MOVIESWATCHED/GET_MOVIES_WATCHED')
+                        this.watchlistChecking = false
+                        this.watchlistCheckingTmdbId = -1
+                    })
+                })
             }
         }
     },
     computed: {
-        ...mapState('TVSPOTTER/MOVIESSEARCHED', ['moviesSearched', 'moviesPages'])
+        ...mapState('TVSPOTTER/MOVIESSEARCHED', ['moviesSearched', 'moviesPages']),
+        ...mapState('TVSPOTTER/MOVIESCHECKRESULT', ['moviesCheckResult']),
+        ...mapState('TVSPOTTER/MOVIESWATCHED', ['moviesWatched'])
+    },
+    mounted () {
+        this.$store.dispatch('TVSPOTTER/MOVIESWATCHED/GET_MOVIES_WATCHED')
     }
 }
 </script>

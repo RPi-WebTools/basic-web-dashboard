@@ -26,7 +26,7 @@
                                                     <v-icon>fas fa-hdd</v-icon>
                                                 </td>
                                                 <td style="border: 0; padding-left: 5px;">
-                                                    <v-tooltip bottom color="primary">
+                                                    <v-tooltip bottom color="primary black--text">
                                                         <template v-slot:activator="{ on }">
                                                             <v-progress-linear :value="item.usedPercentage" height="10" v-on="on"></v-progress-linear>
                                                         </template>
