@@ -56,6 +56,35 @@
         <v-row>
             <v-col cols="12">
                 <div class="bordered">
+                    <v-row no-gutters align="center" justify="center" class="pl-3">
+                        <v-col cols="12" sm="2" class="pt-3">
+                            <v-btn
+                                outlined
+                                color="primary"
+                                :disabled="watchlistChecking"
+                                :loading="watchlistCheckingAll"
+                                @click="checkAll"
+                            >
+                                <v-icon left>fas fa-redo</v-icon> Check all items
+                                <template v-slot:loader>
+                                    <span>{{ watchlistCheckTime }}</span>
+                                </template>
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="12" sm="10" class="pt-3">
+                            <v-subheader class="px-0">Set range in which a movie is considered close to release. This is the criteria to set up the calendar event.</v-subheader>
+                            <v-slider
+                                thumb-label
+                                v-model="daysRangeForCheck"
+                                :disabled="watchlistChecking"
+                                :track-color="sliderTrackColour()"
+                                :label="daysRangeForCheck + ' days'"
+                                min="1"
+                                max="120"
+                                class="px-0 ml-0 mr-1 mb-0 pb-0"
+                            ></v-slider>
+                        </v-col>
+                    </v-row>
                     <TVspotterWatchlist
                         mode="tv"
                         :itemList="tvWatched"
@@ -93,10 +122,16 @@ export default {
             },
             sending: false,
             watchlistChecking: false,
-            watchlistCheckingTmdbId: -1
+            watchlistCheckingTmdbId: -1,
+            watchlistCheckingAll: false,
+            daysRangeForCheck: 14,
+            watchlistCheckTime: ''
         }
     },
     methods: {
+        sliderTrackColour () {
+            return (this.$vuetify.theme.dark) ? '#ffffff' : '#616161'
+        },
         sleep (ms) {
             return new Promise(resolve => setTimeout(resolve, ms))
         },
@@ -114,7 +149,7 @@ export default {
                     'TVSPOTTER/TVCHECKRESULT/GET_TV_CHECK_RESULT',
                     {
                         tmdb_id: parseInt(tmdbId),
-                        days_range: 10 // TODO: make range editable by user
+                        days_range: this.daysRangeForCheck
                     }
                 ).then(() => {
                     this.sleep(1000).then(() => { this.$store.dispatch('TVSPOTTER/TVWATCHED/GET_TV_WATCHED') })
@@ -130,7 +165,7 @@ export default {
                     'TVSPOTTER/TVCHECKRESULT/GET_TV_CHECK_RESULT',
                     {
                         tmdb_id: parseInt(tmdbId),
-                        days_range: 10 // TODO: make range editable by user
+                        days_range: this.daysRangeForCheck
                     }
                 ).then(() => {
                     this.sleep(1000).then(() => {
@@ -140,6 +175,37 @@ export default {
                     })
                 })
             }
+        },
+        checkAll () {
+            this.watchlistChecking = true
+            this.watchlistCheckingAll = true
+            this.watchlistCheckTime = 'est. '
+            this.watchlistCheckTime += Math.floor(this.tvWatched.length / 60).toString().padStart(2, '0') + ':'
+            this.watchlistCheckTime += (this.tvWatched.length - Math.floor(this.tvWatched.length / 60)).toString().padStart(2, '0') + ' sec'
+
+            this.tvWatched.forEach((element, index, array) => {
+                this.watchlistCheckingTmdbId = parseInt(element.tmdbId)
+
+                this.sleep(1000 * (index + 1)).then(() => {
+                    this.$store.dispatch(
+                        'TVSPOTTER/TVCHECKRESULT/GET_TV_CHECK_RESULT',
+                        {
+                            tmdb_id: parseInt(element.tmdbId),
+                            days_range: this.daysRangeForCheck
+                        }
+                    ).then(() => {
+                        if (index === array.length - 1) {
+                            this.sleep(1000).then(() => {
+                                this.$store.dispatch('TVSPOTTER/TVWATCHED/GET_TV_WATCHED')
+                                this.watchlistChecking = false
+                                this.watchlistCheckingAll = false
+                                this.watchlistCheckingTmdbId = -1
+                                this.watchlistCheckTime = ''
+                            })
+                        }
+                    })
+                })
+            })
         }
     },
     computed: {
