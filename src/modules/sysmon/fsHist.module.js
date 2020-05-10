@@ -10,7 +10,7 @@ const actions = {
         API.get(url).then((result) => {
             commit('SET_FS_HIST', result.data)
         }, (err) => {
-            console.log(err)
+            console.error(err)
         })
     }
 }

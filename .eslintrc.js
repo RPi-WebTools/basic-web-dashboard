@@ -11,7 +11,9 @@ module.exports = {
         parser: 'babel-eslint'
     },
     rules: {
-        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        'no-console': [process.env.NODE_ENV === 'production' ? 'error' : 'off', {
+            'allow': ['error']
+        }],
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'vue/script-indent': ['error', 4, {
             'switchCase': 1

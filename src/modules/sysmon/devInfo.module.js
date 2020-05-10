@@ -33,7 +33,7 @@ const actions = {
 
             commit('SET_DEV_INFO', data)
         }, (err) => {
-            console.log(err)
+            console.error(err)
         })
     }
 }

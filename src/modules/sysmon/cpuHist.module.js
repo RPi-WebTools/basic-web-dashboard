@@ -19,7 +19,7 @@ const actions = {
 
             commit('SET_CPU_HIST', data)
         }, (err) => {
-            console.log(err)
+            console.error(err)
         })
     }
 }

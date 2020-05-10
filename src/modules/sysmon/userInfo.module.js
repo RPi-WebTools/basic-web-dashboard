@@ -18,7 +18,7 @@ const actions = {
         API.get(url).then((result) => {
             commit('SET_USER_INFO', result.data)
         }, (err) => {
-            console.log(err)
+            console.error(err)
         })
     }
 }

@@ -12,7 +12,7 @@ const actions = {
             commit('SET_MOVIES_SEARCHED', result.data.items)
             commit('SET_MOVIES_PAGES', result.data.pages)
         }, (err) => {
-            console.log(err)
+            console.error(err)
         })
     }
 }

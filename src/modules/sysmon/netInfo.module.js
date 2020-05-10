@@ -20,7 +20,7 @@ const actions = {
         API.get(url).then((result) => {
             commit('SET_NET_INFO', result.data)
         }, (err) => {
-            console.log(err)
+            console.error(err)
         })
     }
 }
