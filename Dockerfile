@@ -1,5 +1,7 @@
 # 1. build stage
-FROM node:lts-alpine as build-stage
+# this version of node can be used to create a Dockerfile for non-ARM arch:
+# FROM node:lts-alpine as build-stage
+FROM arm32v7/node:lts as build-stage
 WORKDIR /app
 
 COPY package*.json ./
