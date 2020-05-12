@@ -21,7 +21,7 @@
             </v-btn>
         </v-app-bar>
 
-        <v-navigation-drawer app clipped :src="require('../assets/sidebarBG.png')" v-model="navState">
+        <v-navigation-drawer app clipped :src="require('../assets/sidebarBG.png')" v-model="navState" color="rgba(255, 0, 0, 0)">
             <sidebar/>
         </v-navigation-drawer>
 

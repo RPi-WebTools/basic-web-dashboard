@@ -1,7 +1,7 @@
 <template>
-    <v-list rounded dark>
+    <v-list rounded dark color="rgba(255, 0, 0, 0)">
         <template v-for="(link, i) in links">
-            <v-divider v-if="link.divider" :key="'dividier-' + i"/>
+            <v-divider v-if="link.divider" :key="'divider-' + i"/>
             <v-list-group v-if="link.expandable" :key="i" style="margin-top: 5px; margin-bottom: 5px;">
                 <v-icon slot="prependIcon" v-text="link.src" style="max-width: 24px;"></v-icon>
                 <template v-slot:activator>
