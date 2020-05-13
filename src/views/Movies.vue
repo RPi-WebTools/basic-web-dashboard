@@ -90,7 +90,9 @@
                         :itemList="moviesWatched"
                         :sending="watchlistChecking"
                         :sendingId="watchlistCheckingTmdbId"
+                        :removing="watchlistRemoving"
                         @checkClicked="checkMovieAgain"
+                        @removeClicked="removeMovie"
                     ></TVspotterWatchlist>
                 </div>
             </v-col>
@@ -125,7 +127,8 @@ export default {
             watchlistCheckingTmdbId: -1,
             watchlistCheckingAll: false,
             daysRangeForCheck: 14,
-            watchlistCheckTime: ''
+            watchlistCheckTime: '',
+            watchlistRemoving: false
         }
     },
     methods: {
@@ -204,6 +207,15 @@ export default {
                             })
                         }
                     })
+                })
+            })
+        },
+        removeMovie (tmdbId) {
+            this.watchlistRemoving = true
+            this.$store.dispatch('TVSPOTTER/MOVIEREMOVE/GET_MOVIE_REMOVE', { tmdb_id: parseInt(tmdbId) }).then(() => {
+                this.sleep(1000).then(() => {
+                    this.$store.dispatch('TVSPOTTER/MOVIESWATCHED/GET_MOVIES_WATCHED')
+                    this.watchlistRemoving = false
                 })
             })
         }

@@ -2,10 +2,24 @@
     <v-container fluid class="py-0">
         <v-row v-for="(item, index) in itemList" :key="index">
             <v-col cols="12">
-                <v-card>
+                <v-card width="100%" @mouseover="startHover(item.tmdbId)" @mouseleave="endHover()">
                     <div class="d-flex flex-no-wrap justify-space-between">
                         <div>
-                            <v-card-title class="headline">{{ item.name }}</v-card-title>
+                            <v-card-title class="headline">
+                                {{ item.name }}
+                                <v-spacer/>
+                                <v-btn
+                                    fab
+                                    x-small
+                                    color="error"
+                                    v-show="item.tmdbId === idHovered"
+                                    elevation="1"
+                                    @click="removeItem(item.tmdbId)"
+                                    :loading="removing"
+                                >
+                                    <v-icon>fas fa-times</v-icon>
+                                </v-btn>
+                            </v-card-title>
                             <v-card-subtitle>Original name: {{ item.originalName }}</v-card-subtitle>
 
                             <v-card-text>
@@ -71,7 +85,13 @@ export default {
         mode: String,
         itemList: Array,
         sending: Boolean,
-        sendingId: Number
+        sendingId: Number,
+        removing: Boolean
+    },
+    data () {
+        return {
+            idHovered: null
+        }
     },
     computed: {
         breakPointMinSm () {
@@ -170,6 +190,16 @@ export default {
         },
         checkAgain (event) {
             this.$emit('checkClicked', event.currentTarget.id)
+        },
+        startHover (id) {
+            this.idHovered = id
+        },
+        endHover () {
+            this.idHovered = null
+        },
+        removeItem (id) {
+            console.log('clicked')
+            this.$emit('removeClicked', id)
         }
     }
 }
