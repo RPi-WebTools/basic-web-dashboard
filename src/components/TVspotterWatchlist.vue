@@ -198,7 +198,6 @@ export default {
             this.idHovered = null
         },
         removeItem (id) {
-            console.log('clicked')
             this.$emit('removeClicked', id)
         }
     }
