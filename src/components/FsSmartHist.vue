@@ -1,5 +1,8 @@
 <template>
-    <line-chart :chartData="dataset" :options="lineOptions" :styles="styles"></line-chart>
+    <div>
+        <line-chart :chartData="dataset" :options="lineOptions" :styles="styles"></line-chart>
+        <p>If this shows anything but a straight line at 'unknown' or 'Ok', you should probably check your hard drive.</p>
+    </div>
 </template>
 
 <script>
@@ -7,7 +10,7 @@ import LineChart from '../charts/LineChart.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-    name: 'FsReadHist',
+    name: 'FsSmartHist',
     components: {
         LineChart
     },
@@ -22,7 +25,7 @@ export default {
         }
     },
     mounted () {
-        this.$store.dispatch('SYSMON/FSIOHIST/GET_FS_IO_HIST')
+        this.$store.dispatch('SYSMON/FSHIST/GET_FS_HIST')
     },
     computed: {
         theme () {
@@ -32,14 +35,32 @@ export default {
             return (this.$vuetify.theme.dark) ? '#ffffff' : '#616161'
         },
         dataset () {
+            const item = this.fsHistByUuid(this.uuid)[0]
+            const data = []
+            item.smart.forEach((status) => {
+                switch (status) {
+                    case 'Predicted Failure':
+                        data.push(2)
+                        break
+                    case 'Ok':
+                        data.push(1)
+                        break
+                    case 'unknown':
+                    default:
+                        data.push(0)
+                        break
+                }
+            })
+
             return {
-                labels: this.fsIoHist.timestamps,
+                labels: item.timestamps,
                 datasets: [
                     {
                         fill: false,
-                        backgroundColor: this.$vuetify.theme.themes[this.theme].success,
-                        borderColor: this.$vuetify.theme.themes[this.theme].success,
-                        data: this.fsIoHist.rx
+                        backgroundColor: this.$vuetify.theme.themes[this.theme].primary,
+                        borderColor: this.$vuetify.theme.themes[this.theme].primary,
+                        steppedLine: 'middle',
+                        data: data
                     }
                 ]
             }
@@ -74,16 +95,15 @@ export default {
                     yAxes: [{
                         ticks: {
                             beginAtZero: true,
+                            precision: 0,
                             fontColor: this.chartFontColour,
                             callback: (value, index, values) => {
-                                if (value > Math.pow(1024, 3)) {
-                                    return (value / 1000000000) + ' GB'
-                                } else if (value > Math.pow(1024, 2)) {
-                                    return (value / 1000000) + ' MB'
-                                } else if (value > 1024) {
-                                    return (value / 1000) + ' kB'
-                                } else if (value > -1) {
-                                    return value + ' B'
+                                if (value === 2) {
+                                    return 'Predicted Failure'
+                                } else if (value === 1) {
+                                    return 'Ok'
+                                } else {
+                                    return 'unknown'
                                 }
                             }
                         },
@@ -97,21 +117,19 @@ export default {
                     callbacks: {
                         label (tooltipItem, data) {
                             const dataset = data.datasets[tooltipItem.datasetIndex]
-                            if (dataset.data[tooltipItem.index] > Math.pow(1024, 3)) {
-                                return +(dataset.data[tooltipItem.index] / Math.pow(1024, 3)).toFixed(2) + ' GB'
-                            } else if (dataset.data[tooltipItem.index] > Math.pow(1024, 2)) {
-                                return +(dataset.data[tooltipItem.index] / Math.pow(1024, 2)).toFixed(2) + ' MB'
-                            } else if (dataset.data[tooltipItem.index] > 1024) {
-                                return +(dataset.data[tooltipItem.index] / 1024).toFixed(2) + 'kB'
-                            } else if (dataset.data[tooltipItem.index] > -1) {
-                                return +(dataset.data[tooltipItem.index]).toFixed(2) + ' B'
+                            if (dataset.data[tooltipItem.index] === 2) {
+                                return 'Predicted Failure'
+                            } else if (dataset.data[tooltipItem.index] === 1) {
+                                return 'Ok'
+                            } else {
+                                return 'unknown'
                             }
                         }
                     }
                 }
             }
         },
-        ...mapGetters('SYSMON/FSIOHIST', ['fsIoHist'])
+        ...mapGetters('SYSMON/FSHIST', ['fsHistByUuid'])
     }
 }
 </script>

@@ -95,6 +95,14 @@ export default {
                 },
                 animation: {
                     duration: 0
+                },
+                tooltips: {
+                    callbacks: {
+                        label (tooltipItem, data) {
+                            const dataset = data.datasets[tooltipItem.datasetIndex]
+                            return +(dataset.data[tooltipItem.index]).toFixed(2) + ' %'
+                        }
+                    }
                 }
             }
         },

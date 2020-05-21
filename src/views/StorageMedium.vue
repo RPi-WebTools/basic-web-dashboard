@@ -115,9 +115,9 @@
                 </v-col>
                 <v-col cols="12" md="6">
                     <v-card class="background" height="100%">
-                        <v-card-title class="primary--text">Read operations</v-card-title>
+                        <v-card-title class="primary--text">Usage history</v-card-title>
                         <v-card-text>
-                            <FsReadHist :uuid="uuid" />
+                            <FsUsageHist :uuid="uuid" />
                         </v-card-text>
                     </v-card>
                 </v-col>
@@ -191,9 +191,9 @@
                 </v-col>
                 <v-col cols="12" md="6">
                     <v-card class="background" height="100%">
-                        <v-card-title class="primary--text">Write operations</v-card-title>
+                        <v-card-title class="primary--text">SMART history</v-card-title>
                         <v-card-text>
-                            <FsWriteHist :uuid="uuid" />
+                            <FsSmartHist :uuid="uuid" />
                         </v-card-text>
                     </v-card>
                 </v-col>
@@ -204,8 +204,8 @@
 
 <script>
 import DoughnutChart from '@/charts/DoughnutChart.vue'
-import FsReadHist from '@/components/FsReadHist.vue'
-import FsWriteHist from '@/components/FsWriteHist.vue'
+import FsSmartHist from '@/components/FsSmartHist.vue'
+import FsUsageHist from '@/components/FsUsageHist.vue'
 
 export default {
     name: 'StorageMedium',
@@ -215,8 +215,8 @@ export default {
     },
     components: {
         DoughnutChart,
-        FsReadHist,
-        FsWriteHist
+        FsSmartHist,
+        FsUsageHist
     },
     data () {
         return {

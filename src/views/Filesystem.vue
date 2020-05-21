@@ -12,6 +12,13 @@
                 <router-view :key="$route.path" :fsDetails="selectedFsDetails" @created="childCreated" />
             </v-col>
         </v-row>
+        <v-row>
+            <v-col cols="12">
+                <v-card class="px-2 pb-3 pt-1" tile>
+                    <FsIoHist />
+                </v-card>
+            </v-col>
+        </v-row>
 
         <FabDataRefresh :latestTimestamp="latestTimestamp" />
     </v-container>
@@ -20,12 +27,14 @@
 <script>
 import FabDataRefresh from '@/components/FabDataRefresh.vue'
 import FsInfo from '@/components/FsInfo.vue'
+import FsIoHist from '@/components/FsIoHist.vue'
 
 export default {
     name: 'Filesystem',
     components: {
         FabDataRefresh,
-        FsInfo
+        FsInfo,
+        FsIoHist
     },
     data () {
         return {

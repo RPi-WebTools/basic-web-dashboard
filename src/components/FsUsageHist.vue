@@ -7,7 +7,7 @@ import LineChart from '../charts/LineChart.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-    name: 'FsReadHist',
+    name: 'FsUsageHist',
     components: {
         LineChart
     },
@@ -17,12 +17,12 @@ export default {
     data () {
         return {
             styles: {
-                height: '300px'
+                height: '245px'
             }
         }
     },
     mounted () {
-        this.$store.dispatch('SYSMON/FSIOHIST/GET_FS_IO_HIST')
+        this.$store.dispatch('SYSMON/FSHIST/GET_FS_HIST')
     },
     computed: {
         theme () {
@@ -32,14 +32,15 @@ export default {
             return (this.$vuetify.theme.dark) ? '#ffffff' : '#616161'
         },
         dataset () {
+            const item = this.fsHistByUuid(this.uuid)[0]
             return {
-                labels: this.fsIoHist.timestamps,
+                labels: item.timestamps,
                 datasets: [
                     {
                         fill: false,
-                        backgroundColor: this.$vuetify.theme.themes[this.theme].success,
-                        borderColor: this.$vuetify.theme.themes[this.theme].success,
-                        data: this.fsIoHist.rx
+                        backgroundColor: this.$vuetify.theme.themes[this.theme].accent,
+                        borderColor: this.$vuetify.theme.themes[this.theme].accent,
+                        data: item.used
                     }
                 ]
             }
@@ -111,7 +112,7 @@ export default {
                 }
             }
         },
-        ...mapGetters('SYSMON/FSIOHIST', ['fsIoHist'])
+        ...mapGetters('SYSMON/FSHIST', ['fsHistByUuid'])
     }
 }
 </script>
