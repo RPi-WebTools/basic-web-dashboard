@@ -96,6 +96,7 @@ export default {
                         ticks: {
                             beginAtZero: true,
                             precision: 0,
+                            max: 2,
                             fontColor: this.chartFontColour,
                             callback: (value, index, values) => {
                                 if (value === 2) {

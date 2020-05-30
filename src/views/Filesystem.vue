@@ -28,6 +28,7 @@
 import FabDataRefresh from '@/components/FabDataRefresh.vue'
 import FsInfo from '@/components/FsInfo.vue'
 import FsIoHist from '@/components/FsIoHist.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: 'Filesystem',
@@ -61,29 +62,16 @@ export default {
     },
     mounted () {
         if (this.childUuid !== null) {
-            // console.log('CHILD DONE')
             this.showFsDetails = true
-            // TODO: need to get data here too
-            this.selectedFsDetails = {
-                num: 1,
-                name: '/dev/sda',
-                fsType: 'vfat',
-                label: 'Ext HDD',
-                mount: '/home/pi/ext',
-                size: 1000200990720,
-                used: 794093477888,
-                usedPercentage: 79.3933904540894,
-                uuid: 'eluwgg-398z93',
-                smart: 'Ok',
-                vendor: 'TOSHIBA',
-                modelName: 'External_USB_3.0',
-                interface: 'USB',
-                diskType: 'HD',
-                removable: false,
-                partitionLabels: ['Part1', 'Part2', 'Part3'],
-                partitions: [264697825962, 264697825962, 264125442752]
-            }
+            this.$store.dispatch('SYSMON/FSINFO/GET_FS_INFO').then(data => {
+                this.$store.dispatch('SYSMON/FSHIST/GET_FS_HIST').then(() => {
+                    this.selectedFsDetails = this.fsInfo.filter(item => item.uuid === this.childUuid)[0]
+                })
+            })
         }
+    },
+    computed: {
+        ...mapState('SYSMON/FSINFO', ['fsInfo'])
     }
 }
 </script>

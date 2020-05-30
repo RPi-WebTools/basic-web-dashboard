@@ -6,11 +6,15 @@ const state = {
 
 const actions = {
     GET_FS_HIST ({ commit }) {
-        const url = '/sysmon/fsHist'
-        API.get(url).then((result) => {
-            commit('SET_FS_HIST', result.data)
-        }, (err) => {
-            console.error(err)
+        return new Promise((resolve, reject) => {
+            const url = '/sysmon/fsHist'
+            API.get(url).then((result) => {
+                commit('SET_FS_HIST', result.data)
+                resolve(result.data)
+            }, (err) => {
+                console.error(err)
+                reject(err)
+            })
         })
     }
 }
