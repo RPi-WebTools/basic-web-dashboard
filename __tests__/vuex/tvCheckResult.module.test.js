@@ -2,7 +2,7 @@ import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import { cloneDeep } from 'lodash'
 
-import moviesCheckResult from '../../src/modules/tvspotter/moviesCheckResult.module'
+import tvCheckResult from '../../src/modules/tvspotter/tvCheckResult.module'
 
 let url = ''
 let payload = ''
@@ -23,8 +23,8 @@ jest.mock('../../src/api', () => ({
                         name: '2',
                         originalName: '3',
                         firstRelease: '4',
-                        theatricalRelease: '5',
-                        digitalPhysicalRelease: '6',
+                        nextRelease: '5',
+                        nextEpisode: '6',
                         poster: '7',
                         backdrop: '8',
                         status: 0
@@ -35,7 +35,7 @@ jest.mock('../../src/api', () => ({
     }
 }))
 
-describe('moviesCheckResult', () => {
+describe('tvCheckResult', () => {
     let store
 
     const defaultState = {
@@ -43,8 +43,8 @@ describe('moviesCheckResult', () => {
         name: '',
         originalName: '',
         firstRelease: '',
-        theatricalRelease: '',
-        digitalPhysicalRelease: '',
+        nextRelease: '',
+        nextEpisode: '',
         poster: '',
         backdrop: '',
         status: -1
@@ -54,7 +54,7 @@ describe('moviesCheckResult', () => {
         const localVue = createLocalVue()
         localVue.use(Vuex)
 
-        store = new Vuex.Store(cloneDeep(moviesCheckResult))
+        store = new Vuex.Store(cloneDeep(tvCheckResult))
 
         url = ''
         payload = ''
@@ -62,29 +62,29 @@ describe('moviesCheckResult', () => {
     })
 
     it('has a default state', () => {
-        expect(store.state.moviesCheckResult).toEqual(defaultState)
+        expect(store.state.tvCheckResult).toEqual(defaultState)
     })
 
     it('has a working mutation', () => {
-        expect(store.state.moviesCheckResult).toEqual(defaultState)
-        store.commit('SET_MOVIES_CHECK_RESULT', {
+        expect(store.state.tvCheckResult).toEqual(defaultState)
+        store.commit('SET_TV_CHECK_RESULT', {
             tmdbId: '1',
             name: '2',
             originalName: '3',
             firstRelease: '4',
-            theatricalRelease: '5',
-            digitalPhysicalRelease: '6',
+            nextRelease: '5',
+            nextEpisode: '6',
             poster: '7',
             backdrop: '8',
             status: 0
         })
-        expect(store.state.moviesCheckResult).toEqual({
+        expect(store.state.tvCheckResult).toEqual({
             tmdbId: '1',
             name: '2',
             originalName: '3',
             firstRelease: '4',
-            theatricalRelease: '5',
-            digitalPhysicalRelease: '6',
+            nextRelease: '5',
+            nextEpisode: '6',
             poster: '7',
             backdrop: '8',
             status: 0
@@ -92,25 +92,25 @@ describe('moviesCheckResult', () => {
     })
 
     it('has a working getter', () => {
-        expect(store.getters.moviesCheckResult).toEqual(defaultState)
-        store.state.moviesCheckResult = {
+        expect(store.getters.tvCheckResult).toEqual(defaultState)
+        store.state.tvCheckResult = {
             tmdbId: '1',
             name: '2',
             originalName: '3',
             firstRelease: '4',
-            theatricalRelease: '5',
-            digitalPhysicalRelease: '6',
+            nextRelease: '5',
+            nextEpisode: '6',
             poster: '7',
             backdrop: '8',
             status: 0
         }
-        expect(store.getters.moviesCheckResult).toEqual({
+        expect(store.getters.tvCheckResult).toEqual({
             tmdbId: '1',
             name: '2',
             originalName: '3',
             firstRelease: '4',
-            theatricalRelease: '5',
-            digitalPhysicalRelease: '6',
+            nextRelease: '5',
+            nextEpisode: '6',
             poster: '7',
             backdrop: '8',
             status: 0
@@ -118,19 +118,19 @@ describe('moviesCheckResult', () => {
     })
 
     it('has a working action', async () => {
-        expect(store.state.moviesCheckResult).toEqual(defaultState)
+        expect(store.state.tvCheckResult).toEqual(defaultState)
 
-        await store.dispatch('GET_MOVIES_CHECK_RESULT', '1')
+        await store.dispatch('GET_TV_CHECK_RESULT', '1')
 
-        expect(url).toBe('/tvspotter/check/movie')
+        expect(url).toBe('/tvspotter/check/tv')
         expect(payload).toBe('1')
-        expect(store.state.moviesCheckResult).toEqual({
+        expect(store.state.tvCheckResult).toEqual({
             tmdbId: '1',
             name: '2',
             originalName: '3',
             firstRelease: '4',
-            theatricalRelease: '5',
-            digitalPhysicalRelease: '6',
+            nextRelease: '5',
+            nextEpisode: '6',
             poster: '7',
             backdrop: '8',
             status: 0
@@ -140,7 +140,7 @@ describe('moviesCheckResult', () => {
     it('catches an API error', async () => {
         mockReject = true
         try {
-            await store.dispatch('GET_MOVIES_CHECK_RESULT', '1')
+            await store.dispatch('GET_TV_CHECK_RESULT', '1')
         }
         catch (err) {
             expect(err).toBe('no')
