@@ -42,6 +42,7 @@ export default {
                     {
                         label: 'Used',
                         fill: false,
+                        lineTension: 0,
                         backgroundColor: this.$vuetify.theme.themes[this.theme].success,
                         borderColor: this.$vuetify.theme.themes[this.theme].success,
                         showLine: true,
@@ -64,18 +65,13 @@ export default {
                     xAxes: [{
                         ticks: {
                             fontColor: this.chartFontColour,
-                            maxTicksLimit: 20
+                            maxTicksLimit: 20,
+                            callback: (value, index, values) => {
+                                return this.formatDate(value)
+                            }
                         },
                         gridLines: {
                             color: this.chartFontColour
-                        },
-                        type: 'time',
-                        time: {
-                            unit: 'minute',
-                            displayFormats: {
-                                minute: 'MMM DD HH:mm'
-                            },
-                            parser: 'x'
                         }
                     }],
                     yAxes: [{
@@ -96,17 +92,29 @@ export default {
                 animation: {
                     duration: 0
                 },
+                hover: {
+                    animationDuration: 0
+                },
                 tooltips: {
                     callbacks: {
                         label (tooltipItem, data) {
                             const dataset = data.datasets[tooltipItem.datasetIndex]
                             return +(dataset.data[tooltipItem.index]).toFixed(2) + ' %'
+                        },
+                        title: (tooltipItem, data) => {
+                            return this.formatDate(data.labels[tooltipItem[0].index])
                         }
                     }
                 }
             }
         },
         ...mapState('SYSMON/CPUHIST', ['cpuHist'])
+    },
+    methods: {
+        formatDate (ms) {
+            // localised somthing along 01.01.20 13:00:00
+            return this.moment(ms).format(this.moment.localeData().longDateFormat('L').replace(/YYYY/g, 'YY') + ' LTS')
+        }
     }
 }
 </script>

@@ -4,8 +4,12 @@ import router from './router'
 import store from './store.js'
 import API from './api'
 import vuetify from './plugins/vuetify'
+import moment from 'moment'
+
+moment.locale('de')
 
 Vue.prototype.$http = API
+Vue.prototype.moment = moment
 
 Vue.config.productionTip = false
 

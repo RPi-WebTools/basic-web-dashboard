@@ -55,7 +55,8 @@
                 </v-card>
             </v-col>
             <v-col cols="12" md="6">
-                <v-card class="px-2 pb-3 pt-1" tile>
+                <v-card class="px-2 pb-3 pt-1" tile height="100%">
+                    <v-card-text>This is a placeholder.</v-card-text>
                 </v-card>
             </v-col>
         </v-row>

@@ -93,10 +93,11 @@ export default {
                             return data.labels[tooltipItem[0].index]
                         }
                     }
-                },
-                animation: {
-                    duration: 0
                 }
+                // lets see if performance is well enough to keep the animation
+                // animation: {
+                //     duration: 0
+                // }
             }
         },
         ...mapState('SYSMON/MEMINFO', ['memInfo']),

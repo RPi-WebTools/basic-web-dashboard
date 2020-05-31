@@ -67,7 +67,7 @@ export default {
                         time: {
                             unit: 'day',
                             displayFormats: {
-                                hour: 'MMM DD HH:mm'
+                                day: 'MMM DD HH:mm'
                             },
                             parser: 'x'
                         }
