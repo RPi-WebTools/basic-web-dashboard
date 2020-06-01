@@ -13,12 +13,12 @@
         </v-row>
         <v-row justify="center" align="center" align-content="center">
             <v-col>
-                <p class="title font-weight-medium text-center">You deserve a reward...here, have a cookie! <v-icon class="justify-center">fas fa-cookie-bite</v-icon></p>
+                <p class="title font-weight-medium text-center">You deserve a reward...here, have a cookie!</p>
             </v-col>
         </v-row>
         <v-spacer />
         <v-row justify="center" align="center" align-content="center" class="mt-10">
-            <v-btn color="accent" :to="{ name: 'Home' }">Back to Home</v-btn>
+            <v-btn color="accent" :to="{ name: 'Home' }"><v-icon class="justify-center pr-2">fas fa-cookie-bite</v-icon>Get cookie</v-btn>
         </v-row>
     </v-container>
 </template>
