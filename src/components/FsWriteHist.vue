@@ -54,19 +54,15 @@ export default {
                 scales: {
                     xAxes: [{
                         ticks: {
-                            fontColor: this.chartFontColour
+                            fontColor: this.chartFontColour,
+                            callback: (value, index, values) => {
+                                return this.formatDate(values[index].value)
+                            }
                         },
                         gridLines: {
                             color: this.chartFontColour
                         },
-                        type: 'time',
-                        time: {
-                            unit: 'day',
-                            displayFormats: {
-                                day: 'MMM DD HH:mm'
-                            },
-                            parser: 'x'
-                        }
+                        type: 'time'
                     }],
                     yAxes: [{
                         ticks: {
@@ -103,12 +99,21 @@ export default {
                             } else if (dataset.data[tooltipItem.index] > -1) {
                                 return +(dataset.data[tooltipItem.index]).toFixed(2) + ' B'
                             }
+                        },
+                        title: (tooltipItem, data) => {
+                            return this.formatDate(data.labels[tooltipItem[0].index])
                         }
                     }
                 }
             }
         },
         ...mapGetters('SYSMON/FSIOHIST', ['fsIoHist'])
+    },
+    methods: {
+        formatDate (ms) {
+            // localised something along 01.01.20
+            return this.moment(ms).format(this.moment.localeData().longDateFormat('L').replace(/YYYY/g, 'YY'))
+        }
     }
 }
 </script>

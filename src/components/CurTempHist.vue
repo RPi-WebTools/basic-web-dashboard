@@ -74,12 +74,13 @@ export default {
                             fontColor: this.chartFontColour,
                             maxTicksLimit: 10,
                             callback: (value, index, values) => {
-                                return this.formatDate(value)
+                                return this.formatDate(values[index].value)
                             }
                         },
                         gridLines: {
                             color: this.chartFontColour
-                        }
+                        },
+                        type: 'time'
                     }],
                     yAxes: [{
                         ticks: {
@@ -118,8 +119,8 @@ export default {
     },
     methods: {
         formatDate (ms) {
-            // localised somthing along 01.01.20 13:00:00
-            return this.moment(ms).format(this.moment.localeData().longDateFormat('L').replace(/YYYY/g, 'YY') + ' LTS')
+            // localised something along 01.01.20 13:00:00
+            return this.moment(ms).format(this.moment.localeData().longDateFormat('L').replace(/YYYY/g, 'YY') + ' LT')
         }
     }
 }

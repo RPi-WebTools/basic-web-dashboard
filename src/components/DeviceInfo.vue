@@ -64,7 +64,7 @@
                             <tr>
                                 <td><v-icon>fas fa-memory</v-icon></td>
                                 <td><strong>Total memory:</strong></td>
-                                <td>{{ devInfo.memory }}</td>
+                                <td>{{ bytesToGbytes(devInfo.memory) + ' GB' }}</td>
                             </tr>
                             <tr class="empty-row">
                                 <td class="empty"></td>
@@ -74,7 +74,7 @@
                             <tr>
                                 <td><v-icon>far fa-clock</v-icon></td>
                                 <td><strong>System uptime:</strong></td>
-                                <td>{{ devInfo.uptime }}</td>
+                                <td>{{ +(devInfo.uptime / 3600).toFixed(4) + ' h' }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -92,6 +92,10 @@ export default {
     methods: {
         fetchDeviceData () {
             this.$store.dispatch('SYSMON/DEVINFO/GET_DEV_INFO')
+        },
+        bytesToGbytes (bytes) {
+            const raw = bytes / Math.pow(1024, 3)
+            return +raw.toFixed(2)
         }
     },
     mounted () {

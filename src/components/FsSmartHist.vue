@@ -78,19 +78,15 @@ export default {
                 scales: {
                     xAxes: [{
                         ticks: {
-                            fontColor: this.chartFontColour
+                            fontColor: this.chartFontColour,
+                            callback: (value, index, values) => {
+                                return this.formatDate(values[index].value)
+                            }
                         },
                         gridLines: {
                             color: this.chartFontColour
                         },
-                        type: 'time',
-                        time: {
-                            unit: 'day',
-                            displayFormats: {
-                                day: 'MMM DD HH:mm'
-                            },
-                            parser: 'x'
-                        }
+                        type: 'time'
                     }],
                     yAxes: [{
                         ticks: {
@@ -114,6 +110,12 @@ export default {
                         }
                     }]
                 },
+                animation: {
+                    duration: 0
+                },
+                hover: {
+                    animationDuration: 0
+                },
                 tooltips: {
                     callbacks: {
                         label (tooltipItem, data) {
@@ -125,12 +127,21 @@ export default {
                             } else {
                                 return 'unknown'
                             }
+                        },
+                        title: (tooltipItem, data) => {
+                            return this.formatDate(data.labels[tooltipItem[0].index])
                         }
                     }
                 }
             }
         },
         ...mapGetters('SYSMON/FSHIST', ['fsHistByUuid'])
+    },
+    methods: {
+        formatDate (ms) {
+            // localised something along 01.01.20
+            return this.moment(ms).format(this.moment.localeData().longDateFormat('L').replace(/YYYY/g, 'YY'))
+        }
     }
 }
 </script>

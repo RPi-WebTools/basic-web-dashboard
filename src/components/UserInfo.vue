@@ -97,16 +97,15 @@ export default {
                 scales: {
                     xAxes: [{
                         ticks: {
-                            fontColor: this.chartFontColour
+                            fontColor: this.chartFontColour,
+                            callback: (value, index, values) => {
+                                return this.formatDate(values[index].value)
+                            }
                         },
                         gridLines: {
                             color: this.chartFontColour
                         },
-                        type: 'time',
-                        time: {
-                            unit: 'day',
-                            parser: 'x'
-                        }
+                        type: 'time'
                     }],
                     yAxes: [{
                         ticks: {
@@ -118,6 +117,13 @@ export default {
                             borderDash: [4, 15]
                         }
                     }]
+                },
+                tooltips: {
+                    callbacks: {
+                        title: (tooltipItem, data) => {
+                            return this.formatDate(data.labels[tooltipItem[0].index])
+                        }
+                    }
                 }
             }
         },
@@ -132,6 +138,10 @@ export default {
                 color += letters[Math.floor(Math.random() * 16)]
             }
             return color
+        },
+        formatDate (ms) {
+            // localised something along 01.01.20
+            return this.moment(ms).format(this.moment.localeData().longDateFormat('L').replace(/YYYY/g, 'YY'))
         }
     }
 }

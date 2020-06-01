@@ -2,12 +2,12 @@
     <div>
         <p class="headline pl-3 pt-3">Network Usage</p>
 
-        <p class="title pl-3 pt-3">Bytes received</p>
+        <p class="title pl-3 pt-3 primary--text">Bytes received</p>
         <div class="px-3">
             <BarChart :chartData="datasetRx" :options="barOptions"></BarChart>
         </div>
 
-        <p class="title pl-3 pt-3">Bytes transmitted</p>
+        <p class="title pl-3 pt-3 primary--text">Bytes transmitted</p>
         <div class="px-3">
             <BarChart :chartData="datasetTx" :options="barOptions"></BarChart>
         </div>
@@ -116,19 +116,15 @@ export default {
                 scales: {
                     xAxes: [{
                         ticks: {
-                            fontColor: this.chartFontColour
+                            fontColor: this.chartFontColour,
+                            callback: (value, index, values) => {
+                                return this.formatDate(values[index].value)
+                            }
                         },
                         gridLines: {
                             color: this.chartFontColour
                         },
                         type: 'time',
-                        time: {
-                            unit: 'day',
-                            displayFormats: {
-                                hour: 'MMM DD HH:mm'
-                            },
-                            parser: 'x'
-                        },
                         stacked: true
                     }],
                     yAxes: [{
@@ -153,6 +149,17 @@ export default {
                         },
                         stacked: true
                     }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: (tooltipItem, data) => {
+                            const dataset = data.datasets[tooltipItem.datasetIndex]
+                            return dataset.label + ': ' + this.bytesToGbytes(dataset.data[tooltipItem.index]) + ' GB'
+                        },
+                        title: (tooltipItem, data) => {
+                            return this.formatDate(data.labels[tooltipItem[0].index])
+                        }
+                    }
                 }
             }
         },
@@ -198,6 +205,14 @@ export default {
                 }
             })
             return result
+        },
+        formatDate (ms) {
+            // localised something along 01.01.20
+            return this.moment(ms).format(this.moment.localeData().longDateFormat('L').replace(/YYYY/g, 'YY') + ' LT')
+        },
+        bytesToGbytes (bytes) {
+            const raw = bytes / Math.pow(1024, 3)
+            return +raw.toFixed(3)
         }
     }
 }
