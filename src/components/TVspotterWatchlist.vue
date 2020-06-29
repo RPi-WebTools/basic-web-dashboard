@@ -31,17 +31,17 @@
                                 <div v-if="mode === 'movie'" class="mt-2 d-flex justify-space-between">
                                     <div style="width: 110px;">Digital / Physical:</div>
                                     <v-chip v-if="item.digitalPhysicalRelease !== ''">{{ item.digitalPhysicalRelease }}</v-chip>
-                                    <v-chip v-else>Unknown</v-chip>
+                                    <v-chip v-else color="secondary">Unknown</v-chip>
                                 </div>
                                 <div v-if="mode === 'tv'" class="mt-2 d-flex justify-space-between">
                                     <div style="width: 110px;">Next Release:</div>
                                     <v-chip v-if="item.nextRelease !== ''">{{ item.nextRelease }}</v-chip>
-                                    <v-chip v-else>Unknown</v-chip>
+                                    <v-chip v-else color="secondary">Unknown</v-chip>
                                 </div>
                                 <div v-if="mode === 'tv'" class="mt-2 d-flex justify-space-between">
                                     <div style="width: 110px;">Next Episode:</div>
                                     <v-chip v-if="item.nextEpisode !== ''">{{ item.nextEpisode }}</v-chip>
-                                    <v-chip v-else>Unknown</v-chip>
+                                    <v-chip v-else color="secondary">Unknown</v-chip>
                                 </div>
                                 <v-alert
                                     dense
