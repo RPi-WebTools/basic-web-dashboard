@@ -13,6 +13,13 @@ Vue.prototype.moment = moment
 
 Vue.config.productionTip = false
 
+const DEFAULT_TITLE = 'RPi Dashboard'
+router.afterEach((to, from) => {
+    Vue.nextTick(() => {
+        document.title = (to.name + ' - ' + DEFAULT_TITLE) || DEFAULT_TITLE
+    })
+})
+
 new Vue({
     router,
     store,
